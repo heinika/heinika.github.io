@@ -79,6 +79,11 @@
   </url>
   
   <url>
+    <loc>http://www.example.com/search/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://www.example.com/authors/</loc>
     <priority>0</priority>
   </url>
