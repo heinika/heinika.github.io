@@ -5,7 +5,7 @@
     <link>http://www.example.com/categories/</link>
     <description>Recent content in Categories on heinika</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 06 May 2019 17:26:34 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 May 2019 11:43:46 +0800</lastBuildDate>
     
 	<atom:link href="http://www.example.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,7 +13,7 @@
     <item>
       <title>Essay</title>
       <link>http://www.example.com/categories/essay/</link>
-      <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
+      <pubDate>Tue, 07 May 2019 11:43:46 +0800</pubDate>
       
       <guid>http://www.example.com/categories/essay/</guid>
       <description></description>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shells on heinika</title>
+    <link>http://www.example.com/shell/</link>
+    <description>Recent content in Shells on heinika</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 07 May 2019 11:43:46 +0800</lastBuildDate>
+    
+	<atom:link href="http://www.example.com/shell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Wsl_problem</title>
+      <link>http://www.example.com/shell/wsl_problem/</link>
+      <pubDate>Tue, 07 May 2019 11:43:46 +0800</pubDate>
+      
+      <guid>http://www.example.com/shell/wsl_problem/</guid>
+      <description> linux cp 出现 cannot stat 路径后面出现 一般由于在window下编辑的文档换行符是\r\n,而unix下换行符为\n。导致的问题。
+sudo apt-get install dos2unix  使用命令转换：
+dos2unix filename  </description>
+    </item>
+    
+  </channel>
+</rss>
