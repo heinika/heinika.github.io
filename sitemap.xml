@@ -9,7 +9,7 @@
   </url>
   
   <url>
-    <loc>http://www.example.com/categories/essay/</loc>
+    <loc>http://www.example.com/tags/shell/</loc>
     <lastmod>2019-05-07T11:43:46+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -21,19 +21,7 @@
   </url>
   
   <url>
-    <loc>http://www.example.com/tags/solitude/</loc>
-    <lastmod>2019-05-07T11:43:46+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://www.example.com/tags/</loc>
-    <lastmod>2019-05-07T11:43:46+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.example.com/tags/thinking/</loc>
     <lastmod>2019-05-07T11:43:46+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -50,7 +38,37 @@
   </url>
   
   <url>
+    <loc>http://www.example.com/categories/shell/</loc>
+    <lastmod>2019-05-07T11:43:46+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/wsl/</loc>
+    <lastmod>2019-05-07T11:43:46+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/categories/essay/</loc>
+    <lastmod>2019-05-06T17:26:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://www.example.com/post/</loc>
+    <lastmod>2019-05-06T17:26:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/solitude/</loc>
+    <lastmod>2019-05-06T17:26:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/thinking/</loc>
     <lastmod>2019-05-06T17:26:34+08:00</lastmod>
     <priority>0</priority>
   </url>
