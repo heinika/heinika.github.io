@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Essay on heinika</title>
+    <link>http://www.example.com/categories/essay/</link>
+    <description>Recent content in Essay on heinika</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 06 May 2019 17:26:34 +0800</lastBuildDate>
+    
+	<atom:link href="http://www.example.com/categories/essay/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于孤独</title>
+      <link>http://www.example.com/post/hello/</link>
+      <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
+      
+      <guid>http://www.example.com/post/hello/</guid>
+      <description>重新开始写作。
+从停止写作到现在应该有一两年了，想念写作的感觉。
+昨天婆婆猪给我发了个视频，是复旦老师陈果的一段演讲，关于孤独，我出乎意料的把这段视频听完了。想起了村上春树的一段话：
+ 然而随着年龄的增长,我们逐渐认识到,这样的苦痛和创伤 在人生中其实很有必要。仔细想一想,正是跟别人多少有所不同, 人才得以确立自我,一直作为独立的存在。就我而言,便是能坚 持写小说 能在同一道风景中看到不同于他人的景致、感受到不 同于他人的东西、选择不同于他人的语句,才能不断写出属于自 己的故事来。甚至还产生了一种罕见的状况:为数绝不算少的人 把它拿在手中阅读。我就是我,不是别人,这是我的一份重要的 资产。心灵所受的伤,便是人为了这种自立性不得不支付给世界 的代价。
+我基本是如此思考,并依循着这样的思考度过人生。就结果 而言,在某种程度上,我也许是主动地追求孤绝。对于从事我 这种职业的人来说,尽管有程度上的差异,这却是无法绕道回避 的必经之路。这种孤绝之感会像不时从瓶中溢出的酸一般,在不 知不觉中腐蚀人的心灵,将之溶化。这是一把锋利的双刃剑,保 护人的心灵,也细微却不间歇地损伤心灵的内壁。这种危险,我 们大概有所体味,心知肚明。唯其如此,我才必须不断地物理性 地运动身体,有时甚至穷尽体力,来排除身体内部负荷的孤绝感。 说是刻意而为,不如说是凭着直觉行事。
+ 希望每个人都可以孤独而有趣着。</description>
+    </item>
+    
+  </channel>
+</rss>
