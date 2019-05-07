@@ -2,65 +2,65 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on heinika</title>
-    <link>http://www.example.com/tags/</link>
+    <link>https://heinika.github.io/tags/</link>
     <description>Recent content in Tags on heinika</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Tue, 07 May 2019 11:43:46 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://heinika.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Shell</title>
-      <link>http://www.example.com/tags/shell/</link>
+      <link>https://heinika.github.io/tags/shell/</link>
       <pubDate>Tue, 07 May 2019 11:43:46 +0800</pubDate>
       
-      <guid>http://www.example.com/tags/shell/</guid>
+      <guid>https://heinika.github.io/tags/shell/</guid>
       <description></description>
     </item>
     
     <item>
       <title>wsl</title>
-      <link>http://www.example.com/tags/wsl/</link>
+      <link>https://heinika.github.io/tags/wsl/</link>
       <pubDate>Tue, 07 May 2019 11:43:46 +0800</pubDate>
       
-      <guid>http://www.example.com/tags/wsl/</guid>
+      <guid>https://heinika.github.io/tags/wsl/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Solitude</title>
-      <link>http://www.example.com/tags/solitude/</link>
+      <link>https://heinika.github.io/tags/solitude/</link>
       <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
       
-      <guid>http://www.example.com/tags/solitude/</guid>
+      <guid>https://heinika.github.io/tags/solitude/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Thinking</title>
-      <link>http://www.example.com/tags/thinking/</link>
+      <link>https://heinika.github.io/tags/thinking/</link>
       <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
       
-      <guid>http://www.example.com/tags/thinking/</guid>
+      <guid>https://heinika.github.io/tags/thinking/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Configuration</title>
-      <link>http://www.example.com/tags/config/</link>
+      <link>https://heinika.github.io/tags/config/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.example.com/tags/config/</guid>
+      <guid>https://heinika.github.io/tags/config/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Opengraph</title>
-      <link>http://www.example.com/tags/og/</link>
+      <link>https://heinika.github.io/tags/og/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.example.com/tags/og/</guid>
+      <guid>https://heinika.github.io/tags/og/</guid>
       <description></description>
     </item>
     

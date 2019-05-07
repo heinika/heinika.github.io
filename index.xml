@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on heinika</title>
-    <link>http://www.example.com/</link>
+    <link>https://heinika.github.io/</link>
     <description>Recent content in Home on heinika</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Tue, 07 May 2019 11:43:46 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://heinika.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>http://www.example.com/about/</link>
+      <link>https://heinika.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.example.com/about/</guid>
+      <guid>https://heinika.github.io/about/</guid>
       <description>Mínimo is a Spanish word that roughly translate to Minimal.
 Minimo is a minimalist theme for Hugo.
 Minimo keeps the focus on your content and lets it shine!</description>
@@ -23,10 +23,10 @@ Minimo keeps the focus on your content and lets it shine!</description>
     
     <item>
       <title>Wsl_problem</title>
-      <link>http://www.example.com/shell/wsl_problem/</link>
+      <link>https://heinika.github.io/shell/wsl_problem/</link>
       <pubDate>Tue, 07 May 2019 11:43:46 +0800</pubDate>
       
-      <guid>http://www.example.com/shell/wsl_problem/</guid>
+      <guid>https://heinika.github.io/shell/wsl_problem/</guid>
       <description> linux cp 出现 cannot stat 路径后面出现 一般由于在window下编辑的文档换行符是\r\n,而unix下换行符为\n。导致的问题。
 sudo apt-get install dos2unix  使用命令转换：
 dos2unix filename  </description>
@@ -34,10 +34,10 @@ dos2unix filename  </description>
     
     <item>
       <title>关于孤独</title>
-      <link>http://www.example.com/post/hello/</link>
+      <link>https://heinika.github.io/post/hello/</link>
       <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
       
-      <guid>http://www.example.com/post/hello/</guid>
+      <guid>https://heinika.github.io/post/hello/</guid>
       <description>重新开始写作。
 从停止写作到现在应该有一两年了，想念写作的感觉。
 昨天婆婆猪给我发了个视频，是复旦老师陈果的一段演讲，关于孤独，我出乎意料的把这段视频听完了。想起了村上春树的一段话：
@@ -48,19 +48,19 @@ dos2unix filename  </description>
     
     <item>
       <title>Search</title>
-      <link>http://www.example.com/search/</link>
+      <link>https://heinika.github.io/search/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.example.com/search/</guid>
+      <guid>https://heinika.github.io/search/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Search</title>
-      <link>http://www.example.com/search/</link>
+      <link>https://heinika.github.io/search/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.example.com/search/</guid>
+      <guid>https://heinika.github.io/search/</guid>
       <description></description>
     </item>
     

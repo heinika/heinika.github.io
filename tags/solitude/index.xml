@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Solitude on heinika</title>
-    <link>http://www.example.com/tags/solitude/</link>
+    <link>https://heinika.github.io/tags/solitude/</link>
     <description>Recent content in Solitude on heinika</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Mon, 06 May 2019 17:26:34 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/tags/solitude/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://heinika.github.io/tags/solitude/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>关于孤独</title>
-      <link>http://www.example.com/post/hello/</link>
+      <link>https://heinika.github.io/post/hello/</link>
       <pubDate>Mon, 06 May 2019 17:26:34 +0800</pubDate>
       
-      <guid>http://www.example.com/post/hello/</guid>
+      <guid>https://heinika.github.io/post/hello/</guid>
       <description>重新开始写作。
 从停止写作到现在应该有一两年了，想念写作的感觉。
 昨天婆婆猪给我发了个视频，是复旦老师陈果的一段演讲，关于孤独，我出乎意料的把这段视频听完了。想起了村上春树的一段话：
