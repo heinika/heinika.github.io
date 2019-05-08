@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Androids on heinika</title>
+    <link>https://heinika.github.io/android/</link>
+    <description>Recent content in Androids on heinika</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 08 May 2019 15:32:21 +0800</lastBuildDate>
+    
+	<atom:link href="https://heinika.github.io/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Zip file in assets</title>
+      <link>https://heinika.github.io/android/zip_file_in_assets/</link>
+      <pubDate>Wed, 08 May 2019 15:32:21 +0800</pubDate>
+      
+      <guid>https://heinika.github.io/android/zip_file_in_assets/</guid>
+      <description>如何处理 assets 里的 zip 文件？ 通常情况下 assets 里是不会出现 zip 文件的。但总有列外&amp;hellip;
+直接读取（不支持密码） 通过 JDK 自带的 ZipInputStream 进行直接读取。
+val inputStream = assets.open(&amp;#34;Hello.zip&amp;#34;) val zipInputStream = ZipInputStream(inputStream) // 读取一个进入点 var zipEntry = zipInputStream.getNextEntry() while (zipEntry != null) { val name = zipEntry.getName() val sb = StringBuffer(&amp;#34;&amp;#34;) val buffer = ByteArray(1024) var count = 0 while (zipInputStream.read(buffer) &amp;gt; 0) { var str = String(buffer) str = str.trim { it &amp;lt;= &amp;#39; &amp;#39; } sb.</description>
+    </item>
+    
+  </channel>
+</rss>
