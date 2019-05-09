@@ -5,7 +5,7 @@
     <link>https://heinika.github.io/</link>
     <description>Recent content in Home on heinika</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 08 May 2019 15:32:21 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 May 2019 10:50:21 +0800</lastBuildDate>
     
 	<atom:link href="https://heinika.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -17,6 +17,18 @@
       
       <guid>https://heinika.github.io/about/</guid>
       <description>我想大自然是上天赐给人们的无限宝藏。每当看见荡漾的湖水，参天的大树，广阔的海洋，心头总会喜悦。总会想这就够了，就算只有这些也就足够了。</description>
+    </item>
+    
+    <item>
+      <title>Add aar to maven</title>
+      <link>https://heinika.github.io/android/add_aar_to_maven/</link>
+      <pubDate>Thu, 09 May 2019 10:50:21 +0800</pubDate>
+      
+      <guid>https://heinika.github.io/android/add_aar_to_maven/</guid>
+      <description>添加 com.github.dcendents.android-maven github 地址：https://github.com/dcendents/android-maven-gradle-plugin 添加这个插件主要是为了生成 aar 文件。
+ Modification to the standard Maven plugin to be compatible with android-library projects (aar).
+  添加插件支持
+Using the plugins DSL:  plugins { id &amp;#34;com.github.dcendents.android-maven&amp;#34; version &amp;#34;2.1&amp;#34; } Using legacy plugin application: buildscript { repositories { maven { url &amp;#34;https://plugins.gradle.org/m2/&amp;#34; } } dependencies { classpath &amp;#34;com.github.dcendents:android-maven-gradle-plugin:2.1&amp;#34; } } apply plugin: &amp;#34;com.github.dcendents.android-maven&amp;#34;  设置包名和版本 You can set the maven groupId and version in the script build.</description>
     </item>
     
     <item>
