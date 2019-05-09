@@ -11,11 +11,11 @@
     
     
     <item>
-      <title>Add aar to maven</title>
-      <link>https://heinika.github.io/android/add_aar_to_maven/</link>
+      <title>Add aar to jcenter</title>
+      <link>https://heinika.github.io/android/add_aar_to_jcenter/</link>
       <pubDate>Thu, 09 May 2019 10:50:21 +0800</pubDate>
       
-      <guid>https://heinika.github.io/android/add_aar_to_maven/</guid>
+      <guid>https://heinika.github.io/android/add_aar_to_jcenter/</guid>
       <description>添加 com.github.dcendents.android-maven github 地址：https://github.com/dcendents/android-maven-gradle-plugin 添加这个插件主要是为了生成 aar 文件。
  Modification to the standard Maven plugin to be compatible with android-library projects (aar).
   添加插件支持
