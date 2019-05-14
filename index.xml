@@ -32,6 +32,18 @@ Using the plugins DSL:  plugins { id &amp;#34;com.github.dcendents.android-maven
     </item>
     
     <item>
+      <title>Glide</title>
+      <link>https://heinika.github.io/android/glide/</link>
+      <pubDate>Wed, 08 May 2019 15:32:21 +0800</pubDate>
+      
+      <guid>https://heinika.github.io/android/glide/</guid>
+      <description>Glide Webp animate support github repo : https://github.com/roths/GlideWebpSupport
+sample code:
+val options = RequestOptions() .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).diskCacheStrategy(DiskCacheStrategy.NONE) // webp support val decoder = WebpResourceDecoder(this) val byteDecoder = WebpByteBufferDecoder(this) // use prepend() avoid intercept by default decoder Glide.get(this.application).registry .prepend(InputStream::class.java, WebpDrawable::class.java, decoder) .prepend(ByteBuffer::class.java, WebpDrawable::class.java, byteDecoder) Glide.with(imageView).load(&amp;#34;file:///android_asset/sticker.webp&amp;#34;) .apply(options) .transition(DrawableTransitionOptions().crossFade(200)) .into(imageView) neeed add below dependencies:
+implementation &amp;#39;com.github.bumptech.glide:glide:4.9.0&amp;#39; implementation &amp;#34;com.facebook.fresco:animated-webp:1.9.0&amp;#34; implementation &amp;#39;com.facebook.soloader:soloader:0.4.0&amp;#39; implementation &amp;#39;com.facebook.fresco:animated-base-support:0.13.0&amp;#39; implementation &amp;#39;com.</description>
+    </item>
+    
+    <item>
       <title>Zip file in assets</title>
       <link>https://heinika.github.io/android/zip_file_in_assets/</link>
       <pubDate>Wed, 08 May 2019 15:32:21 +0800</pubDate>

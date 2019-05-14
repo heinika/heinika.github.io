@@ -2,19 +2,25 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='人生的追求到底是什么?!'>
+<meta name='description' content='Glide Webp animate support github repo : https://github.com/roths/GlideWebpSupport
+sample code:
+val options = RequestOptions() .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).diskCacheStrategy(DiskCacheStrategy.NONE) // webp support val decoder = WebpResourceDecoder(this) val byteDecoder = WebpByteBufferDecoder(this) // use prepend() avoid intercept by default decoder Glide.get(this.application).registry .prepend(InputStream::class.java, WebpDrawable::class.java, decoder) .prepend(ByteBuffer::class.java, WebpDrawable::class.java, byteDecoder) Glide.with(imageView).load(&#34;file:///android_asset/sticker.webp&#34;) .apply(options) .transition(DrawableTransitionOptions().crossFade(200)) .into(imageView) neeed add below dependencies:
+implementation &#39;com.github.bumptech.glide:glide:4.9.0&#39; implementation &#34;com.facebook.fresco:animated-webp:1.9.0&#34; implementation &#39;com.facebook.soloader:soloader:0.4.0&#39; implementation &#39;com.facebook.fresco:animated-base-support:0.13.0&#39; implementation &#39;com.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='About • heinika'>
-<meta property='og:description' content='人生的追求到底是什么?!'>
-<meta property='og:url' content='https://heinika.github.io/about/'>
+<meta property='og:title' content='Glide • heinika'>
+<meta property='og:description' content='Glide Webp animate support github repo : https://github.com/roths/GlideWebpSupport
+sample code:
+val options = RequestOptions() .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).diskCacheStrategy(DiskCacheStrategy.NONE) // webp support val decoder = WebpResourceDecoder(this) val byteDecoder = WebpByteBufferDecoder(this) // use prepend() avoid intercept by default decoder Glide.get(this.application).registry .prepend(InputStream::class.java, WebpDrawable::class.java, decoder) .prepend(ByteBuffer::class.java, WebpDrawable::class.java, byteDecoder) Glide.with(imageView).load(&#34;file:///android_asset/sticker.webp&#34;) .apply(options) .transition(DrawableTransitionOptions().crossFade(200)) .into(imageView) neeed add below dependencies:
+implementation &#39;com.github.bumptech.glide:glide:4.9.0&#39; implementation &#34;com.facebook.fresco:animated-webp:1.9.0&#34; implementation &#39;com.facebook.soloader:soloader:0.4.0&#39; implementation &#39;com.facebook.fresco:animated-base-support:0.13.0&#39; implementation &#39;com.'>
+<meta property='og:url' content='https://heinika.github.io/android/glide/'>
 <meta property='og:site_name' content='heinika'>
-<meta property='og:type' content='article'><meta property='article:section' content='page'><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='article:section' content='android'><meta property='article:tag' content='glide'><meta property='article:tag' content='webp'><meta property='article:published_time' content='2019-05-08T15:32:21&#43;08:00'/><meta property='article:modified_time' content='2019-05-08T15:32:21&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.55.5" />
 
-  <title>About • heinika</title>
-  <link rel='canonical' href='https://heinika.github.io/about/'>
+  <title>Glide • heinika</title>
+  <link rel='canonical' href='https://heinika.github.io/android/glide/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -25,7 +31,7 @@
   
 
 </head>
-<body class='page type-page has-sidebar'>
+<body class='page type-android has-sidebar'>
 
   <div class='site'><div id='sidebar' class='sidebar'>
   <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
@@ -120,8 +126,8 @@
 </button>
     <ul><li class='item'>
         <a href='/'>Home</a>
-      </li><li class='item current'>
-        <a aria-current='page' href='/about/'>About</a>
+      </li><li class='item'>
+        <a href='/about/'>About</a>
       </li><li class='item'>
         <a href='https://github.com/heinika'>❤</a>
       </li></ul>
@@ -132,7 +138,7 @@
     <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><a href='/'>Home</a></li><li><span>About</span></li></ol>
+      <ol><li><a href='/'>Home</a></li><li><a href='/android/'>Androids</a></li><li><span>Glide</span></li></ol>
     </nav>
   </section></div>
       </div>
@@ -151,13 +157,37 @@
   <header class='header entry-header'>
   <div class='container sep-after'>
     <div class='header-info'>
-      <h1 class='title'>About</h1>
+      <h1 class='title'>Glide</h1>
       
-<p class='desc'>人生的追求到底是什么?!</p>
-
 
     </div>
-    
+    <div class='entry-meta'>
+  <span class='posted-on'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-05-08T15:32:21&#43;08:00'>2019, May 08</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <circle cx="12" cy="12" r="10"/>
+  <polyline points="12 6 12 12 15 15"/>
+  
+</svg>
+One min read
+</span>
+
+
+</div>
+
 
   </div>
 </header>
@@ -166,13 +196,79 @@
   
 
   <div class='container entry-content'>
-  <p>我想大自然是上天赐给人们的无限宝藏。每当看见荡漾的湖水，参天的大树，广阔的海洋，心头总会喜悦。总会想这就够了，就算只有这些也就足够了。</p>
+  
 
+<h1 id="glide-webp-animate-support">Glide Webp animate support</h1>
+
+<p>github repo : <a href="https://github.com/roths/GlideWebpSupport" target="_blank">https://github.com/roths/GlideWebpSupport</a></p>
+
+<p>sample code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> options = RequestOptions()
+                .<span style="color:#66d9ef">override</span>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).diskCacheStrategy(DiskCacheStrategy.NONE)
+<span style="color:#75715e">// webp support
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> decoder = WebpResourceDecoder(<span style="color:#66d9ef">this</span>)
+<span style="color:#66d9ef">val</span> byteDecoder = WebpByteBufferDecoder(<span style="color:#66d9ef">this</span>)
+<span style="color:#75715e">// use prepend() avoid intercept by default decoder
+</span><span style="color:#75715e"></span>Glide.<span style="color:#66d9ef">get</span>(<span style="color:#66d9ef">this</span>.application).registry
+    .prepend(InputStream<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>.java, WebpDrawable<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>.java, decoder)
+    .prepend(ByteBuffer<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>.java, WebpDrawable<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>.java, byteDecoder)
+Glide.with(imageView).load(<span style="color:#e6db74">&#34;file:///android_asset/sticker.webp&#34;</span>)
+        .apply(options)
+        .transition(DrawableTransitionOptions().crossFade(<span style="color:#ae81ff">200</span>))
+        .into(imageView)</code></pre></div>
+<p>neeed add below dependencies:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">    implementation <span style="color:#e6db74">&#39;com.github.bumptech.glide:glide:4.9.0&#39;</span>
+    implementation <span style="color:#e6db74">&#34;com.facebook.fresco:animated-webp:1.9.0&#34;</span>
+    implementation <span style="color:#e6db74">&#39;com.facebook.soloader:soloader:0.4.0&#39;</span>
+    implementation <span style="color:#e6db74">&#39;com.facebook.fresco:animated-base-support:0.13.0&#39;</span>
+    implementation <span style="color:#e6db74">&#39;com.facebook.fresco:webpsupport:1.9.0&#39;</span></code></pre></div>
 </div>
 
   
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/android/'>android</a></div>
+<div class='tags'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z"/>
+  <line x1="7" y1="7" x2="7" y2="7"/>
+  
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/glide/'>glide</a>, <a class='tag' href='/tags/webp/'>webp</a></div>
+
+  </div>
+</footer>
+
 
 </article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/android/zip_file_in_assets/'>
+        <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="20" y1="12" x2="4" y2="12"/>
+  <polyline points="10 18 4 12 10 6"/>
+  
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Zip file in assets</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/android/add_aar_to_jcenter/'>
+        <span class='screen-reader-text'>Next post: </span>Add aar to jcenter<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="4" y1="12" x2="20" y2="12"/>
+  <polyline points="14 6 20 12 14 18"/>
+  
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
 
 
 <section id='comments' class='comments'>

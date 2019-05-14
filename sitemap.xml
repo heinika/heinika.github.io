@@ -53,12 +53,29 @@
   </url>
   
   <url>
+    <loc>https://heinika.github.io/android/glide/</loc>
+    <lastmod>2019-05-08T15:32:21+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://heinika.github.io/android/zip_file_in_assets/</loc>
     <lastmod>2019-05-08T15:32:21+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://heinika.github.io/tags/assets/</loc>
+    <lastmod>2019-05-08T15:32:21+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://heinika.github.io/tags/glide/</loc>
+    <lastmod>2019-05-08T15:32:21+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://heinika.github.io/tags/webp/</loc>
     <lastmod>2019-05-08T15:32:21+08:00</lastmod>
     <priority>0</priority>
   </url>
