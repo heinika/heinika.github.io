@@ -25,6 +25,7 @@
       <a class="brand" href="#top" aria-label="回到顶部">陈·未完稿</a>
       <nav class="nav" aria-label="主要导航">
         <a href="#archive">作品</a>
+        <a href="#atlas">图鉴</a>
         <a href="#about">关于</a>
         <a href="#contact">联系</a>
       </nav>
@@ -113,7 +114,181 @@
           </div>
         </article>
       </div>
+
+      <div class="atlasShowcase" id="atlas">
+        <header class="atlasHeader">
+          <div>
+            <span class="eyebrow">HAND-DRAWN ATLAS / 34 REGIONS</span>
+            <h2>中国地理图鉴</h2>
+          </div>
+          <p>以真实地理轮廓为骨架，把山川、城市、建筑与地方文化画进一张张复古立体地图。</p>
+        </header>
+
+        <div class="atlasFilters" aria-label="按地区筛选手绘地图">
+          <button class="filterButton active" type="button" data-filter="all" aria-pressed="true">全部 34</button>
+          <button class="filterButton" type="button" data-filter="north" aria-pressed="false">华北</button>
+          <button class="filterButton" type="button" data-filter="northeast" aria-pressed="false">东北</button>
+          <button class="filterButton" type="button" data-filter="east" aria-pressed="false">华东</button>
+          <button class="filterButton" type="button" data-filter="central-south" aria-pressed="false">中南</button>
+          <button class="filterButton" type="button" data-filter="southwest" aria-pressed="false">西南</button>
+          <button class="filterButton" type="button" data-filter="northwest" aria-pressed="false">西北</button>
+          <button class="filterButton" type="button" data-filter="hmt" aria-pressed="false">港澳台</button>
+        </div>
+
+        <div class="mapGallery">
+          <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/beijing.webp" data-title="北京市" aria-label="放大查看北京市手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/beijing.webp" alt="北京市复古立体手绘地理图" width="900" height="1350"></span>
+            <span class="mapCaption"><strong>北京市</strong><em>华北 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/tianjin.webp" data-title="天津市" aria-label="放大查看天津市手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/tianjin.webp" alt="天津市复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>天津市</strong><em>华北 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/hebei.webp" data-title="河北省" aria-label="放大查看河北省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/hebei.webp" alt="河北省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>河北省</strong><em>华北 · 03</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/shanxi.webp" data-title="山西省" aria-label="放大查看山西省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/shanxi.webp" alt="山西省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>山西省</strong><em>华北 · 04</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/inner-mongolia.webp" data-title="内蒙古自治区" aria-label="放大查看内蒙古自治区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/inner-mongolia.webp" alt="内蒙古自治区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>内蒙古自治区</strong><em>华北 · 05</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="northeast" data-src="/assets/maps/liaoning.webp" data-title="辽宁省" aria-label="放大查看辽宁省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/liaoning.webp" alt="辽宁省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>辽宁省</strong><em>东北 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northeast" data-src="/assets/maps/jilin.webp" data-title="吉林省" aria-label="放大查看吉林省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/jilin.webp" alt="吉林省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>吉林省</strong><em>东北 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northeast" data-src="/assets/maps/heilongjiang.webp" data-title="黑龙江省" aria-label="放大查看黑龙江省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/heilongjiang.webp" alt="黑龙江省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>黑龙江省</strong><em>东北 · 03</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/shanghai.webp" data-title="上海市" aria-label="放大查看上海市手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/shanghai.webp" alt="上海市复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>上海市</strong><em>华东 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/jiangsu.webp" data-title="江苏省" aria-label="放大查看江苏省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/jiangsu.webp" alt="江苏省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>江苏省</strong><em>华东 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/zhejiang.webp" data-title="浙江省" aria-label="放大查看浙江省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/zhejiang.webp" alt="浙江省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>浙江省</strong><em>华东 · 03</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/anhui.webp" data-title="安徽省" aria-label="放大查看安徽省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/anhui.webp" alt="安徽省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>安徽省</strong><em>华东 · 04</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/fujian.webp" data-title="福建省" aria-label="放大查看福建省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/fujian.webp" alt="福建省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>福建省</strong><em>华东 · 05</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/jiangxi.webp" data-title="江西省" aria-label="放大查看江西省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/jiangxi.webp" alt="江西省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>江西省</strong><em>华东 · 06</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="east" data-src="/assets/maps/shandong.webp" data-title="山东省" aria-label="放大查看山东省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/shandong.webp" alt="山东省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>山东省</strong><em>华东 · 07</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/henan.webp" data-title="河南省" aria-label="放大查看河南省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/henan.webp" alt="河南省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>河南省</strong><em>中南 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/hubei.webp" data-title="湖北省" aria-label="放大查看湖北省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/hubei.webp" alt="湖北省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>湖北省</strong><em>中南 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/hunan.webp" data-title="湖南省" aria-label="放大查看湖南省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/hunan.webp" alt="湖南省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>湖南省</strong><em>中南 · 03</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/guangdong.webp" data-title="广东省" aria-label="放大查看广东省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/guangdong.webp" alt="广东省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>广东省</strong><em>中南 · 04</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/guangxi.webp" data-title="广西壮族自治区" aria-label="放大查看广西壮族自治区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/guangxi.webp" alt="广西壮族自治区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>广西壮族自治区</strong><em>中南 · 05</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="central-south" data-src="/assets/maps/hainan.webp" data-title="海南省" aria-label="放大查看海南省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/hainan.webp" alt="海南省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>海南省</strong><em>中南 · 06</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="southwest" data-src="/assets/maps/chongqing.webp" data-title="重庆市" aria-label="放大查看重庆市手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/chongqing.webp" alt="重庆市复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>重庆市</strong><em>西南 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="southwest" data-src="/assets/maps/sichuan.webp" data-title="四川省" aria-label="放大查看四川省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/sichuan.webp" alt="四川省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>四川省</strong><em>西南 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="southwest" data-src="/assets/maps/guizhou.webp" data-title="贵州省" aria-label="放大查看贵州省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/guizhou.webp" alt="贵州省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>贵州省</strong><em>西南 · 03</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="southwest" data-src="/assets/maps/yunnan.webp" data-title="云南省" aria-label="放大查看云南省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/yunnan.webp" alt="云南省复古立体手绘地理图" width="900" height="1200" loading="lazy"></span>
+            <span class="mapCaption"><strong>云南省</strong><em>西南 · 04</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="southwest" data-src="/assets/maps/tibet.webp" data-title="西藏自治区" aria-label="放大查看西藏自治区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/tibet.webp" alt="西藏自治区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>西藏自治区</strong><em>西南 · 05</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="northwest" data-src="/assets/maps/shaanxi.webp" data-title="陕西省" aria-label="放大查看陕西省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/shaanxi.webp" alt="陕西省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>陕西省</strong><em>西北 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northwest" data-src="/assets/maps/gansu.webp" data-title="甘肃省" aria-label="放大查看甘肃省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/gansu.webp" alt="甘肃省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>甘肃省</strong><em>西北 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northwest" data-src="/assets/maps/qinghai.webp" data-title="青海省" aria-label="放大查看青海省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/qinghai.webp" alt="青海省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>青海省</strong><em>西北 · 03</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northwest" data-src="/assets/maps/ningxia.webp" data-title="宁夏回族自治区" aria-label="放大查看宁夏回族自治区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/ningxia.webp" alt="宁夏回族自治区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>宁夏回族自治区</strong><em>西北 · 04</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="northwest" data-src="/assets/maps/xinjiang.webp" data-title="新疆维吾尔自治区" aria-label="放大查看新疆维吾尔自治区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/xinjiang.webp" alt="新疆维吾尔自治区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>新疆维吾尔自治区</strong><em>西北 · 05</em></span>
+          </button>
+
+          <button class="mapCard" type="button" data-region="hmt" data-src="/assets/maps/hong-kong.webp" data-title="香港特别行政区" aria-label="放大查看香港特别行政区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/hong-kong.webp" alt="香港特别行政区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>香港特别行政区</strong><em>港澳台 · 01</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="hmt" data-src="/assets/maps/macau.webp" data-title="澳门特别行政区" aria-label="放大查看澳门特别行政区手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/macau.webp" alt="澳门特别行政区复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>澳门特别行政区</strong><em>港澳台 · 02</em></span>
+          </button>
+          <button class="mapCard" type="button" data-region="hmt" data-src="/assets/maps/taiwan.webp" data-title="台湾省" aria-label="放大查看台湾省手绘地图">
+            <span class="mapFrame"><img src="/assets/maps/taiwan.webp" alt="台湾省复古立体手绘地理图" width="900" height="1350" loading="lazy"></span>
+            <span class="mapCaption"><strong>台湾省</strong><em>港澳台 · 03</em></span>
+          </button>
+        </div>
+      </div>
     </section>
+
+    <dialog class="mapDialog" id="map-dialog" aria-labelledby="map-dialog-title">
+      <button class="dialogClose" type="button" aria-label="关闭大图">关闭 ×</button>
+      <div class="dialogInner">
+        <img class="dialogImage" alt="" width="900" height="1350">
+        <div class="dialogCaption"><span>HAND-DRAWN ATLAS</span><strong id="map-dialog-title"></strong></div>
+      </div>
+    </dialog>
 
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="aboutIntro">
