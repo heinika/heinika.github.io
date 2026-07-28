@@ -408,9 +408,7 @@ h1 {
   width: min(38vw, 630px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(255, 178, 72, .11), transparent 31%),
-    radial-gradient(circle, color-mix(in srgb, var(--violet) 13%, transparent), transparent 68%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--violet) 13%, transparent), transparent 68%);
   filter: blur(9px);
   content: "";
 }
@@ -452,32 +450,8 @@ h1 {
     radial-gradient(circle at 42% 44%, #ffd45c 0 36%, #ff8b22 69%, #ca3e0d 100%);
   box-shadow:
     inset -13px -12px 25px rgba(164,34,3,.36),
-    inset 9px 8px 18px rgba(255,255,220,.28),
-    0 0 13px rgba(255,211,79,.95),
-    0 0 36px rgba(255,144,35,.7),
-    0 0 90px rgba(255,102,25,.35);
+    inset 9px 8px 18px rgba(255,255,220,.28);
   transform: translate(-50%, -50%) translateZ(24px);
-  animation: sunBreath 5.5s ease-in-out infinite;
-}
-
-.sun::before {
-  position: absolute;
-  z-index: -1;
-  inset: -15%;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 20deg,
-    transparent 0 7%,
-    rgba(255,152,36,.55) 8% 10%,
-    transparent 12% 38%,
-    rgba(255,205,84,.45) 40% 42%,
-    transparent 44% 72%,
-    rgba(255,113,24,.45) 74% 77%,
-    transparent 79%
-  );
-  filter: blur(4px);
-  animation: coronaSpin 16s linear infinite;
-  content: "";
 }
 
 .sun::after {
@@ -905,11 +879,6 @@ footer {
 @keyframes underline { to { transform: scaleX(1); } }
 @keyframes pulse { 0%,100% { opacity: .45; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.15); } }
 @keyframes scan { 0% { transform: translateX(-100%); } 55%,100% { transform: translateX(100%); } }
-@keyframes sunBreath {
-  0%, 100% { transform: translate(-50%,-50%) translateZ(24px) scale(.98); }
-  50% { transform: translate(-50%,-50%) translateZ(30px) scale(1.03); }
-}
-@keyframes coronaSpin { to { transform: rotate(360deg); } }
 @keyframes planetOrbit {
   0% { z-index: 4; transform: rotateX(68deg) rotateZ(-14deg) rotate(0deg); }
   49% { z-index: 4; }
