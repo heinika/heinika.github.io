@@ -17,8 +17,8 @@
   <title>陈·未完稿｜个人作品集</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="preload" as="image" type="image/png" href="/assets/solar-system-planets-v2-refined.png?v=20260728-real2">
-  <link rel="stylesheet" href="/assets/css/portfolio.css?v=20260728-noglow">
-  <script src="/assets/js/portfolio.js?v=20260728-solar2" defer></script>
+  <link rel="stylesheet" href="/assets/css/portfolio.css?v=20260728-map2">
+  <script src="/assets/js/portfolio.js?v=20260728-map2" defer></script>
 </head>
 <body>
   <canvas class="ambientCanvas" id="ambient-canvas" aria-hidden="true"></canvas>
@@ -85,12 +85,13 @@
       </header>
       <div class="projectGrid">
         <article class="projectCard featured">
-          <div class="projectVisual mapVisual" aria-hidden="true">
-            <span class="mapShape"></span>
-            <span class="mapPin pinOne">山川</span>
-            <span class="mapPin pinTwo">城与人</span>
-            <span class="mapPin pinThree">风物</span>
-            <span class="compass">北</span>
+          <div class="projectVisual chinaMapVisual">
+            <div class="chinaMapChrome"><span>CHINA / 34</span><span class="chinaMapLabel">选择省份</span></div>
+            <div class="chinaMapMount" data-map-src="/assets/china-provinces.svg?v=20260728-map2" aria-live="polite">
+              <span class="chinaMapLoading">地图载入中</span>
+            </div>
+            <span class="chinaMapHint">悬停放大 · 点击查看图鉴</span>
+            <span class="chinaMapSource">边界数据参考 · 天地图标准矢量地图</span>
           </div>
           <div class="projectBody">
             <div class="projectMeta"><span>01</span><span>CREATIVE SYSTEM · ONGOING</span></div>

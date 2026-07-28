@@ -58,6 +58,117 @@
     if (event.target === dialog) dialog.close();
   });
 
+  const chinaMapMount = document.querySelector(".chinaMapMount");
+  const chinaMapLabel = document.querySelector(".chinaMapLabel");
+
+  if (chinaMapMount) {
+    let mapViewFrame = 0;
+
+    const parseViewBox = (value) => value.trim().split(/\s+/).map(Number);
+
+    const animateViewBox = (svg, target) => {
+      cancelAnimationFrame(mapViewFrame);
+      if (reducedMotion) {
+        svg.setAttribute("viewBox", target.join(" "));
+        return;
+      }
+
+      const current = svg.viewBox.baseVal;
+      const start = [current.x, current.y, current.width, current.height];
+      const startedAt = performance.now();
+      const duration = 420;
+
+      const draw = (time) => {
+        const progress = Math.min(1, (time - startedAt) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const frame = start.map((value, index) => value + (target[index] - value) * eased);
+        svg.setAttribute("viewBox", frame.join(" "));
+        if (progress < 1) mapViewFrame = requestAnimationFrame(draw);
+      };
+
+      mapViewFrame = requestAnimationFrame(draw);
+    };
+
+    fetch(chinaMapMount.dataset.mapSrc)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Map request failed: ${response.status}`);
+        return response.text();
+      })
+      .then((markup) => {
+        chinaMapMount.innerHTML = markup;
+        const svg = chinaMapMount.querySelector(".chinaMapSvg");
+        if (!svg) throw new Error("Map SVG is missing");
+
+        const defaultViewBox = parseViewBox(svg.dataset.defaultViewbox || svg.getAttribute("viewBox"));
+        const provincePaths = Array.from(svg.querySelectorAll(".chinaProvince"));
+        let activeProvince = null;
+
+        const showProvince = (path) => {
+          if (!path || path === activeProvince) return;
+          activeProvince?.classList.remove("isActive");
+          activeProvince = path;
+          path.classList.add("isActive");
+          svg.classList.add("isZoomed");
+          if (chinaMapLabel) chinaMapLabel.textContent = path.dataset.name || "选择省份";
+
+          const bounds = path.getBBox();
+          const side = Math.max(8, Math.max(bounds.width, bounds.height) * 1.3);
+          const target = [
+            bounds.x + bounds.width / 2 - side / 2,
+            bounds.y + bounds.height / 2 - side / 2,
+            side,
+            side
+          ];
+          animateViewBox(svg, target);
+        };
+
+        const resetProvince = () => {
+          activeProvince?.classList.remove("isActive");
+          activeProvince = null;
+          svg.classList.remove("isZoomed");
+          if (chinaMapLabel) chinaMapLabel.textContent = "选择省份";
+          animateViewBox(svg, defaultViewBox);
+        };
+
+        const provinceFromEvent = (event) => event.target.closest?.(".chinaProvince");
+
+        svg.addEventListener("pointerover", (event) => {
+          const province = provinceFromEvent(event);
+          if (province) showProvince(province);
+        });
+        svg.addEventListener("pointerleave", resetProvince);
+        svg.addEventListener("focusin", (event) => {
+          const province = provinceFromEvent(event);
+          if (province) showProvince(province);
+        });
+        svg.addEventListener("focusout", () => {
+          requestAnimationFrame(() => {
+            if (!svg.contains(document.activeElement)) resetProvince();
+          });
+        });
+        svg.addEventListener("click", (event) => {
+          const province = provinceFromEvent(event);
+          if (!province) return;
+          const targetCard = Array.from(mapCards).find((card) => card.dataset.title === province.dataset.name);
+          targetCard?.click();
+        });
+        svg.addEventListener("keydown", (event) => {
+          const province = provinceFromEvent(event);
+          if (!province || (event.key !== "Enter" && event.key !== " ")) return;
+          event.preventDefault();
+          province.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        if (provincePaths.length !== mapCards.length) {
+          console.warn(`Map/card count mismatch: ${provincePaths.length}/${mapCards.length}`);
+        }
+      })
+      .catch((error) => {
+        chinaMapMount.innerHTML = '<span class="chinaMapLoading">地图载入失败</span>';
+        console.error(error);
+      });
+  }
+
   const revealTargets = document.querySelectorAll(".sectionHeader, .projectCard, .atlasHeader, .mapCard, .aboutIntro, .method, .contact > *");
   if ("IntersectionObserver" in window && !reducedMotion) {
     const observer = new IntersectionObserver((entries) => {
