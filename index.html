@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="paper">
+<html lang="zh-CN" data-theme="night">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f2eadb">
+  <meta name="theme-color" content="#050810">
   <meta name="description" content="技术、设计与好奇心的交界处：手绘地图、网页设计与人机协作实验作品集。">
   <meta property="og:type" content="website">
   <meta property="og:title" content="陈·未完稿｜个人作品集">
@@ -20,6 +20,8 @@
   <script src="/assets/js/portfolio.js" defer></script>
 </head>
 <body>
+  <canvas class="ambientCanvas" id="ambient-canvas" aria-hidden="true"></canvas>
+  <div class="noiseLayer" aria-hidden="true"></div>
   <main class="page">
     <header class="topbar">
       <a class="brand" href="#top" aria-label="回到顶部">陈·未完稿</a>
@@ -30,8 +32,8 @@
         <a href="#contact">联系</a>
       </nav>
       <div class="edition">
-        <span>Portfolio / Vol. 01</span>
-        <span>Selected works · 2026</span>
+        <span class="liveDot">AVAILABLE FOR IDEAS</span>
+        <span>SHANGHAI · CN</span>
       </div>
       <button class="themeToggle" type="button" aria-pressed="false" aria-label="切换到夜色模式">
         <span class="toggleDot"></span><span class="themeText">入夜</span>
@@ -45,13 +47,30 @@
         <div class="verticalLine">把好奇心做成真实的东西</div>
       </aside>
       <div class="heroMain">
-        <div class="kicker">技术 × 设计 × 叙事</div>
-        <h1 id="hero-title">把想法，<br>做成被<span class="accent">看见</span>的作品。</h1>
-        <div class="heroIndex" aria-hidden="true">PORT</div>
+        <div class="kicker"><span>CREATIVE TECHNOLOGIST</span><span>2026</span></div>
+        <h1 id="hero-title">把想法，<br>做成被<span class="accent">看见</span><br>的作品。</h1>
+        <div class="heroIndex" aria-hidden="true">PORTFOLIO / 001</div>
         <div class="heroBottom">
           <p class="subcopy">我在技术、设计与好奇心的交界处工作。从一张手绘地图到一个数字产品，让复杂的问题拥有清楚、好看，也真正可用的表达。</p>
           <a class="cta" href="#archive">查看作品 <span aria-hidden="true">↘</span></a>
         </div>
+      </div>
+      <div class="heroScene" aria-hidden="true">
+        <div class="sceneHud hudTop"><span>OBJECT 001</span><span>LIVE RENDER</span></div>
+        <div class="sceneCore" data-tilt data-tilt-strength="9">
+          <span class="orbit orbitA"><i></i></span>
+          <span class="orbit orbitB"><i></i></span>
+          <span class="orbit orbitC"><i></i></span>
+          <span class="coreSphere">
+            <span class="coreGrid"></span>
+            <strong>未<br>完</strong>
+          </span>
+          <span class="satellite satA"></span>
+          <span class="satellite satB"></span>
+          <span class="satellite satC"></span>
+        </div>
+        <div class="sceneHud hudBottom"><span>X 31.2304</span><span>Y 121.4737</span></div>
+        <div class="scrollCue"><span>SCROLL TO EXPLORE</span><i></i></div>
       </div>
     </section>
 
@@ -311,6 +330,7 @@
       <div class="contactActions">
         <a class="contactLink" href="mailto:vip1024056766@gmail.com">写封邮件 <span aria-hidden="true">↗</span></a>
         <a class="contactLink" href="https://github.com/heinika" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+        <a class="contactLink" href="https://www.xiaohongshu.com/user/profile/63592208000000001802a516" target="_blank" rel="noopener">小红书 · 数字生命小土豆 <span aria-hidden="true">↗</span></a>
       </div>
       <span class="contactNote">更多项目，持续编辑中。</span>
     </section>
