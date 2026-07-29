@@ -1062,11 +1062,24 @@ h1 {
   opacity: 1;
 }
 
-.chinaCityPoint circle {
+.chinaCityPoint {
+  cursor: pointer;
+  outline: none;
+}
+
+.chinaCityHit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+
+.chinaCityDot {
   fill: var(--acid);
   stroke: var(--bg-deep);
   stroke-width: 1.5px;
   vector-effect: non-scaling-stroke;
+  transition: fill .18s ease, filter .18s ease;
+  pointer-events: none;
 }
 
 .chinaCityPoint text {
@@ -1080,6 +1093,211 @@ h1 {
   font-weight: 650;
   letter-spacing: .02em;
   vector-effect: non-scaling-stroke;
+  transition: fill .18s ease;
+  pointer-events: none;
+}
+
+.chinaCityPoint:hover .chinaCityDot,
+.chinaCityPoint:focus-visible .chinaCityDot,
+.chinaCityPoint.isActive .chinaCityDot {
+  fill: var(--cyan);
+  filter: drop-shadow(0 0 5px var(--cyan));
+}
+
+.chinaCityPoint:hover text,
+.chinaCityPoint:focus-visible text,
+.chinaCityPoint.isActive text {
+  fill: var(--acid);
+}
+
+.cityAttractionPanel {
+  position: absolute;
+  z-index: 8;
+  top: 76px;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  width: min(410px, calc(100% - 36px));
+  padding: 20px;
+  border: 1px solid color-mix(in srgb, var(--cyan) 32%, var(--line));
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--cyan) 6%, transparent), transparent 38%),
+    color-mix(in srgb, var(--panel-solid) 95%, transparent);
+  box-shadow: -26px 18px 80px rgba(0,0,0,.42);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  flex-direction: column;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(calc(100% + 34px));
+  transition: opacity .22s ease, transform .32s cubic-bezier(.2,.75,.25,1);
+}
+
+.cityAttractionPanel.isVisible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.cityAttractionHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cityAttractionHeading {
+  display: grid;
+  gap: 5px;
+}
+
+.cityAttractionHeading span,
+.cityAttractionSource {
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: .11em;
+}
+
+.cityAttractionHeading strong {
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.cityAttractionHeader button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.cityAttractionStatus {
+  min-height: 16px;
+  margin: 12px 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+.cityAttractionList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-right: 3px;
+  overflow: auto;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.cityAttractionCard {
+  display: grid;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--panel-hover) 72%, transparent);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color .2s ease, transform .2s ease;
+}
+
+.cityAttractionCard:hover,
+.cityAttractionCard:focus-visible {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.cityAttractionMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.55;
+  margin-bottom: 9px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cyan) 8%, var(--bg-deep));
+  overflow: hidden;
+}
+
+.cityAttractionMedia img,
+.cityAttractionMedia canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cityAttractionMedia img {
+  filter: grayscale(.9) contrast(1.25) brightness(1.08) sepia(.18);
+}
+
+.cityAttractionMedia canvas {
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.cityAttractionMedia canvas.isReady {
+  opacity: 1;
+}
+
+.cityAttractionMedia > span {
+  position: absolute;
+  z-index: 2;
+  top: 6px;
+  left: 6px;
+  padding: 3px 5px;
+  border-radius: 999px;
+  background: rgba(4,10,18,.7);
+  color: var(--acid);
+  font-family: var(--mono);
+  font-size: 7px;
+}
+
+.cityAttractionCard > strong {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cityAttractionCard > span:last-child {
+  display: -webkit-box;
+  margin-top: 5px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cityAttractionSource {
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+.cityAttractionEmpty {
+  grid-column: 1 / -1;
+  padding: 24px 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 12px;
+  color: var(--cyan);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+  text-decoration: none;
 }
 
 .chinaMapHint,
@@ -1456,6 +1674,12 @@ footer {
   .chinaMapPreviewControls .cityAtlasAction { padding-inline: 8px; font-size: 7px; }
   .chinaMapPreview .chinaMapZoomLayer { inset: 48px 12px 18px; width: calc(100% - 24px); height: calc(100% - 66px); }
   .chinaMapPreviewHelp { right: 16px; bottom: 9px; left: 16px; font-size: 7px; }
+  .cityAttractionPanel { top: 58px; right: 10px; bottom: 10px; width: calc(100% - 20px); padding: 14px; border-radius: 15px; }
+  .cityAttractionHeading strong { font-size: 16px; }
+  .cityAttractionList { gap: 7px; }
+  .cityAttractionCard { padding: 6px; }
+  .cityAttractionCard > span:last-child { display: none; }
+  .cityAttractionSource { margin-top: 8px; font-size: 6px; }
   .projectBody { padding: 28px 24px; }
   .atlasShowcase { padding: 76px 20px 50px; }
   .mapGallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }

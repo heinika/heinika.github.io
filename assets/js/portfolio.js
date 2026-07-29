@@ -238,9 +238,8 @@
         const zoomSvg = svg.cloneNode(true);
         const zoomPaths = Array.from(zoomSvg.querySelectorAll(".chinaProvince"));
         zoomSvg.classList.add("chinaMapZoomLayer");
-        zoomSvg.setAttribute("aria-hidden", "true");
-        zoomSvg.removeAttribute("aria-label");
-        zoomSvg.removeAttribute("role");
+        zoomSvg.setAttribute("aria-label", "省份城市交互地图");
+        zoomSvg.setAttribute("role", "group");
         zoomPaths.forEach((path) => {
           path.removeAttribute("tabindex");
           path.removeAttribute("role");
@@ -266,6 +265,15 @@
         const atlasButton = document.createElement("button");
         const closeButton = document.createElement("button");
         const previewHelp = document.createElement("p");
+        const attractionPanel = document.createElement("aside");
+        const attractionHeader = document.createElement("div");
+        const attractionHeading = document.createElement("div");
+        const attractionKicker = document.createElement("span");
+        const attractionTitle = document.createElement("strong");
+        const attractionClose = document.createElement("button");
+        const attractionStatus = document.createElement("p");
+        const attractionList = document.createElement("div");
+        const attractionSource = document.createElement("p");
         previewPanel.className = "chinaMapPreview";
         previewPanel.setAttribute("aria-labelledby", "city-map-title");
         previewHeader.className = "chinaMapPreviewHeader";
@@ -274,7 +282,7 @@
         previewTitle.id = "city-map-title";
         previewKicker.textContent = "CITY ATLAS / PROVINCE DETAIL";
         previewHelp.className = "chinaMapPreviewHelp";
-        previewHelp.textContent = "滚轮 / 双指缩放 · 拖动查看 · 双击继续放大";
+        previewHelp.textContent = "点击城市查看附近景点 · 滚轮 / 双指缩放 · 拖动查看";
         zoomOutButton.type = "button";
         zoomOutButton.textContent = "−";
         zoomOutButton.setAttribute("aria-label", "缩小地图");
@@ -290,15 +298,35 @@
         closeButton.type = "button";
         closeButton.textContent = "×";
         closeButton.setAttribute("aria-label", "关闭城市地图");
+        attractionPanel.className = "cityAttractionPanel";
+        attractionPanel.setAttribute("aria-hidden", "true");
+        attractionPanel.inert = true;
+        attractionHeader.className = "cityAttractionHeader";
+        attractionHeading.className = "cityAttractionHeading";
+        attractionKicker.textContent = "CITY FIELD NOTES / NEARBY";
+        attractionTitle.textContent = "城市景点";
+        attractionClose.type = "button";
+        attractionClose.textContent = "×";
+        attractionClose.setAttribute("aria-label", "关闭城市景点");
+        attractionStatus.className = "cityAttractionStatus";
+        attractionStatus.setAttribute("aria-live", "polite");
+        attractionList.className = "cityAttractionList";
+        attractionSource.className = "cityAttractionSource";
+        attractionSource.textContent = "实时资料与图像 · 中文维基百科 / Wikimedia";
+        attractionHeading.append(attractionKicker, attractionTitle);
+        attractionHeader.append(attractionHeading, attractionClose);
+        attractionPanel.append(attractionHeader, attractionStatus, attractionList, attractionSource);
         previewMeta.append(previewKicker, previewTitle);
         previewControls.append(zoomOutButton, zoomResetButton, zoomInButton, atlasButton, closeButton);
         previewHeader.append(previewMeta, previewControls);
-        previewPanel.append(previewHeader, zoomSvg, previewHelp);
+        previewPanel.append(previewHeader, zoomSvg, previewHelp, attractionPanel);
         document.body.append(previewPanel);
 
         let activeProvince = null;
         let cityBaseFont = 1;
         let cityBaseRadius = 1;
+        let attractionRequest = 0;
+        const attractionCache = new Map();
 
         const zoomPathFor = (path) => zoomPaths.find(
           (candidate) => candidate.dataset.code === path.dataset.code
@@ -308,6 +336,209 @@
           /(哈尼族彝族自治州|布依族苗族自治州|苗族侗族自治州|壮族苗族自治州|蒙古族藏族自治州|藏族羌族自治州|傣族景颇族自治州|自治州|特别行政区|地区|市|盟)$/,
           ""
         );
+
+        const distanceBetween = (latitudeA, longitudeA, latitudeB, longitudeB) => {
+          const radians = (degrees) => degrees * Math.PI / 180;
+          const latitudeDelta = radians(latitudeB - latitudeA);
+          const longitudeDelta = radians(longitudeB - longitudeA);
+          const a = Math.sin(latitudeDelta / 2) ** 2
+            + Math.cos(radians(latitudeA)) * Math.cos(radians(latitudeB))
+            * Math.sin(longitudeDelta / 2) ** 2;
+          return 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        };
+
+        const cityCoordinates = (city) => {
+          const projection = cityData.projection || {};
+          if (!projection.xScale || !projection.yScale) return null;
+          return {
+            latitude: (city.y - projection.yOffset) / projection.yScale,
+            longitude: (city.x - projection.xOffset) / projection.xScale
+          };
+        };
+
+        const sketchImage = (image, canvas) => {
+          const width = 360;
+          const height = 220;
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext("2d", { willReadFrequently: true });
+          if (!context) return;
+          const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+          const drawWidth = image.naturalWidth * scale;
+          const drawHeight = image.naturalHeight * scale;
+          context.drawImage(
+            image,
+            (width - drawWidth) / 2,
+            (height - drawHeight) / 2,
+            drawWidth,
+            drawHeight
+          );
+
+          let pixels;
+          try {
+            pixels = context.getImageData(0, 0, width, height);
+          } catch {
+            return;
+          }
+          const source = new Uint8ClampedArray(pixels.data);
+          const grayscale = new Float32Array(width * height);
+          for (let index = 0; index < grayscale.length; index += 1) {
+            const offset = index * 4;
+            grayscale[index] = source[offset] * .299 + source[offset + 1] * .587 + source[offset + 2] * .114;
+          }
+          for (let y = 1; y < height - 1; y += 1) {
+            for (let x = 1; x < width - 1; x += 1) {
+              const index = y * width + x;
+              const offset = index * 4;
+              const edge = Math.abs(grayscale[index + 1] - grayscale[index - 1])
+                + Math.abs(grayscale[index + width] - grayscale[index - width]);
+              const ink = Math.min(1, edge / 38);
+              const shade = (255 - grayscale[index]) / 255;
+              const paperRed = 238 - shade * 35;
+              const paperGreen = 247 - shade * 28;
+              const paperBlue = 248 - shade * 20;
+              pixels.data[offset] = paperRed * (1 - ink) + 18 * ink;
+              pixels.data[offset + 1] = paperGreen * (1 - ink) + 112 * ink;
+              pixels.data[offset + 2] = paperBlue * (1 - ink) + 137 * ink;
+              pixels.data[offset + 3] = 255;
+            }
+          }
+          context.putImageData(pixels, 0, 0);
+          canvas.classList.add("isReady");
+        };
+
+        const fetchAttractions = async (city) => {
+          if (attractionCache.has(city.name)) return attractionCache.get(city.name);
+          const coordinates = cityCoordinates(city);
+          const cityName = shortCityName(city.name);
+          const parameters = new URLSearchParams({
+            action: "query",
+            format: "json",
+            origin: "*",
+            generator: "search",
+            gsrsearch: `${cityName} (公园 OR 博物馆 OR 景区 OR 风景区 OR 古城 OR 遗址 OR 寺 OR 山 OR 湖 OR 塔 OR 宫 OR 陵)`,
+            gsrnamespace: "0",
+            gsrlimit: "28",
+            prop: "coordinates|pageimages|extracts|info",
+            pithumbsize: "720",
+            piprop: "thumbnail",
+            exintro: "1",
+            explaintext: "1",
+            inprop: "url"
+          });
+          let response = await fetch(`/api/attractions?city=${encodeURIComponent(cityName)}`);
+          if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
+            response = await fetch(`https://zh.wikipedia.org/w/api.php?${parameters}`);
+          }
+          if (!response.ok) throw new Error(`Attraction request failed: ${response.status}`);
+          const payload = await response.json();
+          const scenicPattern = /(公园|博物馆|景区|风景区|古城|遗址|寺|庙|山|湖|塔|宫|陵|峡谷|洞|岛|湿地|长城|纪念馆|城墙|园林|故居|古镇|草原)/;
+          const excludedPattern = /(地铁|铁路|道路|学校|大学|政府|医院|公司|行政区|机场|车站|高速公路|旅游景点$)/;
+          const pages = Object.values(payload.query?.pages || {})
+            .sort((a, b) => (a.index ?? 99) - (b.index ?? 99))
+            .filter((page) => {
+              if (!page.thumbnail?.source || excludedPattern.test(page.title)) return false;
+              const text = `${page.title} ${page.extract || ""}`;
+              if (!scenicPattern.test(text)) return false;
+              const point = page.coordinates?.[0];
+              if (coordinates && point) {
+                return distanceBetween(
+                  coordinates.latitude,
+                  coordinates.longitude,
+                  point.lat,
+                  point.lon
+                ) < 160000;
+              }
+              return text.includes(cityName);
+            })
+            .slice(0, 6);
+          attractionCache.set(city.name, pages);
+          return pages;
+        };
+
+        const closeAttractions = () => {
+          attractionRequest += 1;
+          attractionPanel.classList.remove("isVisible");
+          attractionPanel.setAttribute("aria-hidden", "true");
+          attractionPanel.inert = true;
+          previewPanel.classList.remove("hasAttractions");
+          cityLayer.querySelectorAll(".chinaCityPoint.isActive").forEach(
+            (group) => group.classList.remove("isActive")
+          );
+        };
+
+        const renderAttractions = (city, places) => {
+          attractionList.replaceChildren();
+          if (!places.length) {
+            const empty = document.createElement("a");
+            empty.className = "cityAttractionEmpty";
+            empty.href = `https://map.baidu.com/search/${encodeURIComponent(`${shortCityName(city.name)} 景点`)}/`;
+            empty.target = "_blank";
+            empty.rel = "noopener";
+            empty.textContent = "暂未找到带图资料，前往地图继续查找附近景点 ↗";
+            attractionList.append(empty);
+            return;
+          }
+          places.forEach((place, index) => {
+            const card = document.createElement("a");
+            const media = document.createElement("span");
+            const image = document.createElement("img");
+            const sketch = document.createElement("canvas");
+            const number = document.createElement("span");
+            const title = document.createElement("strong");
+            const description = document.createElement("span");
+            card.className = "cityAttractionCard";
+            card.href = place.fullurl || `https://zh.wikipedia.org/wiki/${encodeURIComponent(place.title)}`;
+            card.target = "_blank";
+            card.rel = "noopener";
+            media.className = "cityAttractionMedia";
+            image.crossOrigin = "anonymous";
+            image.loading = "lazy";
+            image.alt = `${place.title}景点图`;
+            const originalImage = place.thumbnail.source;
+            const proxyImage = `/api/attraction-image?src=${encodeURIComponent(originalImage)}`;
+            image.src = proxyImage;
+            image.addEventListener("error", () => {
+              if (image.src === originalImage) return;
+              image.src = originalImage;
+            }, { once: true });
+            sketch.setAttribute("aria-hidden", "true");
+            image.addEventListener("load", () => sketchImage(image, sketch), { once: true });
+            number.textContent = String(index + 1).padStart(2, "0");
+            title.textContent = place.title;
+            description.textContent = (place.extract || "打开条目查看景点资料。").replace(/\s+/g, " ").slice(0, 72);
+            media.append(image, sketch, number);
+            card.append(media, title, description);
+            attractionList.append(card);
+          });
+        };
+
+        const openAttractions = async (city, group) => {
+          const request = ++attractionRequest;
+          cityLayer.querySelectorAll(".chinaCityPoint.isActive").forEach(
+            (candidate) => candidate.classList.remove("isActive")
+          );
+          group.classList.add("isActive");
+          attractionTitle.textContent = `${city.name} · 景点`;
+          attractionStatus.textContent = "正在检索附近景点与图像…";
+          attractionList.replaceChildren();
+          attractionPanel.classList.add("isVisible");
+          attractionPanel.setAttribute("aria-hidden", "false");
+          attractionPanel.inert = false;
+          previewPanel.classList.add("hasAttractions");
+          try {
+            const places = await fetchAttractions(city);
+            if (request !== attractionRequest) return;
+            attractionStatus.textContent = places.length
+              ? `找到 ${places.length} 处带图景点 · 点击卡片查看资料`
+              : "附近暂时没有可用的带图条目";
+            renderAttractions(city, places);
+          } catch {
+            if (request !== attractionRequest) return;
+            attractionStatus.textContent = "景点资料暂时无法载入";
+            renderAttractions(city, []);
+          }
+        };
 
         const renderCities = (path, side) => {
           cityLayer.replaceChildren();
@@ -323,6 +554,7 @@
 
           cities.forEach((city, index) => {
             const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const hitArea = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             const placeLeft = city.x > centerX;
@@ -330,9 +562,20 @@
             const horizontalOffset = placeLeft ? -labelGap : labelGap;
 
             group.classList.add("chinaCityPoint");
+            group.setAttribute("tabindex", "0");
+            group.setAttribute("role", "button");
+            group.setAttribute("aria-label", `查看${city.name}景点`);
+            group.cityData = city;
+            hitArea.classList.add("chinaCityHit");
+            hitArea.setAttribute("cx", city.x);
+            hitArea.setAttribute("cy", city.y);
+            hitArea.setAttribute("r", cityBaseRadius * 5);
+            hitArea.dataset.baseRadius = cityBaseRadius * 5;
+            point.classList.add("chinaCityDot");
             point.setAttribute("cx", city.x);
             point.setAttribute("cy", city.y);
             point.setAttribute("r", cityBaseRadius);
+            point.dataset.baseRadius = cityBaseRadius;
             label.setAttribute("x", city.x + horizontalOffset);
             label.setAttribute("y", city.y + verticalOffset);
             label.setAttribute("text-anchor", placeLeft ? "end" : "start");
@@ -342,7 +585,7 @@
             label.dataset.offsetX = horizontalOffset;
             label.dataset.offsetY = verticalOffset;
             label.textContent = shortCityName(city.name);
-            group.append(point, label);
+            group.append(hitArea, point, label);
             cityLayer.append(group);
           });
 
@@ -354,7 +597,7 @@
         const updateSemanticScale = (scale = 1) => {
           cityLayer.style.setProperty("--city-font", `${cityBaseFont / scale}px`);
           cityLayer.querySelectorAll("circle").forEach((point) => {
-            point.setAttribute("r", cityBaseRadius / scale);
+            point.setAttribute("r", Number(point.dataset.baseRadius || cityBaseRadius) / scale);
           });
           cityLayer.querySelectorAll("text").forEach((label) => {
             label.setAttribute("x", Number(label.dataset.cityX) + Number(label.dataset.offsetX) / scale);
@@ -382,6 +625,7 @@
 
         const activatePreview = (path) => {
           if (path !== activeProvince) return;
+          closeAttractions();
           const previewPath = zoomPathFor(path);
           if (!previewPath) return;
           zoomPaths.forEach((candidate) => candidate.classList.remove("isActive"));
@@ -429,6 +673,7 @@
 
         const resetProvince = (force = false) => {
           if (previewOpen && !force) return;
+          closeAttractions();
           activeProvince?.classList.remove("isActive");
           activeProvince = null;
           if (chinaMapLabel) chinaMapLabel.textContent = "选择省份";
@@ -477,10 +722,25 @@
           province.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
+        cityLayer.addEventListener("click", (event) => {
+          const group = event.target.closest?.(".chinaCityPoint");
+          if (!group?.cityData) return;
+          event.preventDefault();
+          event.stopPropagation();
+          openAttractions(group.cityData, group);
+        });
+        cityLayer.addEventListener("keydown", (event) => {
+          const group = event.target.closest?.(".chinaCityPoint");
+          if (!group?.cityData || (event.key !== "Enter" && event.key !== " ")) return;
+          event.preventDefault();
+          openAttractions(group.cityData, group);
+        });
+
         zoomOutButton.addEventListener("click", () => changeZoom(1 / 1.5));
         zoomResetButton.addEventListener("click", resetZoom);
         zoomInButton.addEventListener("click", () => changeZoom(1.5));
         closeButton.addEventListener("click", () => previewPanel.close());
+        attractionClose.addEventListener("click", closeAttractions);
         atlasButton.addEventListener("click", () => {
           const provinceName = activeProvince?.dataset.name;
           const targetCard = Array.from(mapCards).find((card) => card.dataset.title === provinceName);
@@ -492,6 +752,7 @@
         });
         previewPanel.addEventListener("close", () => {
           previewOpen = false;
+          closeAttractions();
           resetProvince(true);
           resetZoom();
         });
