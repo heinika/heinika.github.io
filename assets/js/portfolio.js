@@ -127,10 +127,12 @@
 
   if (chinaMapMount) {
     let mapViewFrame = 0;
+    let previewTimer = 0;
+    let resetTimer = 0;
 
     const parseViewBox = (value) => value.trim().split(/\s+/).map(Number);
 
-    const animateViewBox = (svg, target) => {
+    const animateViewBox = (svg, target, duration = 460) => {
       cancelAnimationFrame(mapViewFrame);
       if (reducedMotion) {
         svg.setAttribute("viewBox", target.join(" "));
@@ -140,7 +142,6 @@
       const current = svg.viewBox.baseVal;
       const start = [current.x, current.y, current.width, current.height];
       const startedAt = performance.now();
-      const duration = 420;
 
       const draw = (time) => {
         const progress = Math.min(1, (time - startedAt) / duration);
@@ -165,33 +166,76 @@
 
         const defaultViewBox = parseViewBox(svg.dataset.defaultViewbox || svg.getAttribute("viewBox"));
         const provincePaths = Array.from(svg.querySelectorAll(".chinaProvince"));
+        const zoomSvg = svg.cloneNode(true);
+        const zoomPaths = Array.from(zoomSvg.querySelectorAll(".chinaProvince"));
+        zoomSvg.classList.add("chinaMapZoomLayer");
+        zoomSvg.setAttribute("aria-hidden", "true");
+        zoomSvg.removeAttribute("aria-label");
+        zoomSvg.removeAttribute("role");
+        zoomPaths.forEach((path) => {
+          path.removeAttribute("tabindex");
+          path.removeAttribute("role");
+          path.removeAttribute("aria-label");
+        });
+        chinaMapMount.append(zoomSvg);
+
         let activeProvince = null;
 
-        const showProvince = (path) => {
-          if (!path || path === activeProvince) return;
-          activeProvince?.classList.remove("isActive");
-          activeProvince = path;
-          path.classList.add("isActive");
-          svg.classList.add("isZoomed");
-          if (chinaMapLabel) chinaMapLabel.textContent = path.dataset.name || "选择省份";
+        const zoomPathFor = (path) => zoomPaths.find(
+          (candidate) => candidate.dataset.code === path.dataset.code
+        );
+
+        const activatePreview = (path) => {
+          if (path !== activeProvince) return;
+          const previewPath = zoomPathFor(path);
+          if (!previewPath) return;
+          zoomPaths.forEach((candidate) => candidate.classList.remove("isActive"));
+          previewPath.classList.add("isActive");
+          zoomSvg.classList.add("isZoomed", "isVisible");
+          chinaMapMount.classList.add("isPreviewing");
 
           const bounds = path.getBBox();
-          const side = Math.max(8, Math.max(bounds.width, bounds.height) * 1.3);
-          const target = [
+          const padding = Math.max(18, Math.max(bounds.width, bounds.height) * .34);
+          const width = Math.max(42, bounds.width + padding * 2);
+          const height = Math.max(42, bounds.height + padding * 2);
+          const side = Math.max(width, height);
+          animateViewBox(zoomSvg, [
             bounds.x + bounds.width / 2 - side / 2,
             bounds.y + bounds.height / 2 - side / 2,
             side,
             side
-          ];
-          animateViewBox(svg, target);
+          ]);
+        };
+
+        const showProvince = (path, immediate = false) => {
+          if (!path || path === activeProvince) return;
+          clearTimeout(previewTimer);
+          clearTimeout(resetTimer);
+          activeProvince?.classList.remove("isActive");
+          activeProvince = path;
+          path.classList.add("isActive");
+          if (chinaMapLabel) chinaMapLabel.textContent = path.dataset.name || "选择省份";
+          previewTimer = window.setTimeout(
+            () => activatePreview(path),
+            immediate || reducedMotion ? 0 : 110
+          );
         };
 
         const resetProvince = () => {
+          clearTimeout(previewTimer);
           activeProvince?.classList.remove("isActive");
           activeProvince = null;
-          svg.classList.remove("isZoomed");
           if (chinaMapLabel) chinaMapLabel.textContent = "选择省份";
-          animateViewBox(svg, defaultViewBox);
+          chinaMapMount.classList.remove("isPreviewing");
+          zoomSvg.classList.remove("isVisible");
+          animateViewBox(zoomSvg, defaultViewBox, 320);
+          clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => {
+            if (activeProvince) return;
+            zoomSvg.classList.remove("isZoomed");
+            zoomPaths.forEach((candidate) => candidate.classList.remove("isActive"));
+            zoomSvg.setAttribute("viewBox", defaultViewBox.join(" "));
+          }, reducedMotion ? 0 : 340);
         };
 
         const provinceFromEvent = (event) => event.target.closest?.(".chinaProvince");
@@ -199,11 +243,12 @@
         svg.addEventListener("pointerover", (event) => {
           const province = provinceFromEvent(event);
           if (province) showProvince(province);
+          else if (event.target === svg) resetProvince();
         });
         svg.addEventListener("pointerleave", resetProvince);
         svg.addEventListener("focusin", (event) => {
           const province = provinceFromEvent(event);
-          if (province) showProvince(province);
+          if (province) showProvince(province, true);
         });
         svg.addEventListener("focusout", () => {
           requestAnimationFrame(() => {
