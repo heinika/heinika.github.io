@@ -3,7 +3,6 @@
   const themeButton = document.querySelector(".themeToggle");
   const themeLabel = themeButton?.querySelector(".themeText");
   const themeMeta = document.querySelector('meta[name="theme-color"]');
-  const savedTheme = localStorage.getItem("portfolio-theme");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function applyTheme(theme) {
@@ -15,13 +14,66 @@
     themeMeta?.setAttribute("content", paper ? "#e9edf2" : "#050810");
   }
 
-  applyTheme(savedTheme === "paper" ? "paper" : "night");
+  applyTheme(root.dataset.theme === "paper" ? "paper" : "night");
 
   themeButton?.addEventListener("click", () => {
     const next = root.dataset.theme === "night" ? "paper" : "night";
-    localStorage.setItem("portfolio-theme", next);
+    try {
+      localStorage.setItem("portfolio-theme", next);
+    } catch {}
     applyTheme(next);
   });
+
+  const topbar = document.querySelector(".topbar");
+  const navToggle = document.querySelector(".navToggle");
+  const navLinks = Array.from(document.querySelectorAll(".nav a"));
+
+  function setMenu(open) {
+    if (!topbar || !navToggle) return;
+    topbar.dataset.menuOpen = String(open);
+    navToggle.setAttribute("aria-expanded", String(open));
+    navToggle.setAttribute("aria-label", open ? "关闭导航" : "打开导航");
+  }
+
+  navToggle?.addEventListener("click", () => {
+    setMenu(topbar?.dataset.menuOpen !== "true");
+  });
+  navLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+  });
+
+  const progress = document.querySelector(".readingProgress");
+  let scrollFrame = 0;
+  function updateProgress() {
+    const scrollable = document.documentElement.scrollHeight - innerHeight;
+    const ratio = scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0;
+    progress?.style.setProperty("--progress", ratio);
+    scrollFrame = 0;
+  }
+  window.addEventListener("scroll", () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateProgress);
+  }, { passive: true });
+  window.addEventListener("resize", updateProgress, { passive: true });
+  updateProgress();
+
+  const observedSections = navLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+  if ("IntersectionObserver" in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        const active = link.getAttribute("href") === `#${visible.target.id}`;
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    }, { rootMargin: "-22% 0px -62% 0px", threshold: [0, 0.25, 0.6] });
+    observedSections.forEach((section) => sectionObserver.observe(section));
+  }
 
   const filterButtons = document.querySelectorAll(".filterButton");
   const mapCards = document.querySelectorAll(".mapCard");
@@ -32,15 +84,27 @@
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const filter = button.dataset.filter;
-      filterButtons.forEach((item) => {
-        const active = item === button;
-        item.classList.toggle("active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
-      mapCards.forEach((card) => {
-        card.hidden = filter !== "all" && card.dataset.region !== filter;
-      });
+      const updateFilter = () => {
+        filterButtons.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        mapCards.forEach((card) => {
+          card.hidden = filter !== "all" && card.dataset.region !== filter;
+        });
+      };
+      if (document.startViewTransition && !reducedMotion) {
+        document.startViewTransition(updateFilter);
+      } else {
+        updateFilter();
+      }
     });
+  });
+
+  mapCards.forEach((card) => {
+    const image = card.querySelector("img");
+    if (image && !image.hasAttribute("decoding")) image.decoding = "async";
   });
 
   mapCards.forEach((card) => {

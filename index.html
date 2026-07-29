@@ -14,20 +14,30 @@
   <meta name="twitter:title" content="陈·未完稿｜个人作品集">
   <meta name="twitter:description" content="把想法，做成被看见的作品。">
   <meta name="twitter:image" content="https://heinika.github.io/assets/portfolio-og.png">
+  <meta name="color-scheme" content="dark light">
   <title>陈·未完稿｜个人作品集</title>
+  <script>
+    try {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      const prefersPaper = matchMedia("(prefers-color-scheme: light)").matches;
+      document.documentElement.dataset.theme = savedTheme || (prefersPaper ? "paper" : "night");
+    } catch {}
+  </script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=20260728-orbit1">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260728-orbit1">
   <link rel="preload" as="image" type="image/png" href="/assets/solar-system-planets-v2-refined.png?v=20260728-real2">
-  <link rel="stylesheet" href="/assets/css/portfolio.css?v=20260728-map2">
-  <script src="/assets/js/portfolio.js?v=20260728-map2" defer></script>
+  <link rel="stylesheet" href="/assets/css/portfolio.css?v=20260729-modern1">
+  <script src="/assets/js/portfolio.js?v=20260729-modern1" defer></script>
 </head>
 <body>
+  <a class="skipLink" href="#main-content">跳到主要内容</a>
   <canvas class="ambientCanvas" id="ambient-canvas" aria-hidden="true"></canvas>
   <div class="noiseLayer" aria-hidden="true"></div>
-  <main class="page">
-    <header class="topbar">
+  <main class="page" id="main-content">
+    <header class="topbar" data-menu-open="false">
+      <span class="readingProgress" aria-hidden="true"></span>
       <a class="brand" href="#top" aria-label="回到顶部">陈·未完稿</a>
-      <nav class="nav" aria-label="主要导航">
+      <nav class="nav" id="primary-nav" aria-label="主要导航">
         <a href="#archive">作品</a>
         <a href="#atlas">图鉴</a>
         <a href="#about">关于</a>
@@ -39,6 +49,9 @@
       </div>
       <button class="themeToggle" type="button" aria-pressed="false" aria-label="切换到夜色模式">
         <span class="toggleDot"></span><span class="themeText">入夜</span>
+      </button>
+      <button class="navToggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="打开导航">
+        <span></span><span></span>
       </button>
     </header>
 
@@ -159,7 +172,7 @@
 
         <div class="mapGallery">
           <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/beijing.webp" data-title="北京市" aria-label="放大查看北京市手绘地图">
-            <span class="mapFrame"><img src="/assets/maps/beijing.webp" alt="北京市复古立体手绘地理图" width="900" height="1350"></span>
+            <span class="mapFrame"><img src="/assets/maps/beijing.webp" alt="北京市复古立体手绘地理图" width="900" height="1350" decoding="async" fetchpriority="high"></span>
             <span class="mapCaption"><strong>北京市</strong><em>华北 · 01</em></span>
           </button>
           <button class="mapCard" type="button" data-region="north" data-src="/assets/maps/tianjin.webp" data-title="天津市" aria-label="放大查看天津市手绘地图">
