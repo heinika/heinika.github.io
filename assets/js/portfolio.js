@@ -154,12 +154,16 @@
       mapViewFrame = requestAnimationFrame(draw);
     };
 
-    fetch(chinaMapMount.dataset.mapSrc)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Map request failed: ${response.status}`);
-        return response.text();
-      })
-      .then((markup) => {
+    const mapRequest = fetch(chinaMapMount.dataset.mapSrc).then((response) => {
+      if (!response.ok) throw new Error(`Map request failed: ${response.status}`);
+      return response.text();
+    });
+    const cityRequest = fetch(chinaMapMount.dataset.citiesSrc)
+      .then((response) => response.ok ? response.json() : { provinces: {} })
+      .catch(() => ({ provinces: {} }));
+
+    Promise.all([mapRequest, cityRequest])
+      .then(([markup, cityData]) => {
         chinaMapMount.innerHTML = markup;
         const svg = chinaMapMount.querySelector(".chinaMapSvg");
         if (!svg) throw new Error("Map SVG is missing");
@@ -177,6 +181,9 @@
           path.removeAttribute("role");
           path.removeAttribute("aria-label");
         });
+        const cityLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        cityLayer.classList.add("chinaCityLayer");
+        zoomSvg.append(cityLayer);
         chinaMapMount.append(zoomSvg);
 
         let activeProvince = null;
@@ -184,6 +191,44 @@
         const zoomPathFor = (path) => zoomPaths.find(
           (candidate) => candidate.dataset.code === path.dataset.code
         );
+
+        const shortCityName = (name = "") => name.replace(
+          /(哈尼族彝族自治州|布依族苗族自治州|苗族侗族自治州|壮族苗族自治州|蒙古族藏族自治州|藏族羌族自治州|傣族景颇族自治州|自治州|特别行政区|地区|市|盟)$/,
+          ""
+        );
+
+        const renderCities = (path, side) => {
+          cityLayer.replaceChildren();
+          const cities = cityData.provinces?.[path.dataset.code] || [];
+          const bounds = path.getBBox();
+          const centerX = bounds.x + bounds.width / 2;
+          const fontSize = side / 48;
+          const labelGap = side / 90;
+          const pointRadius = side / 190;
+          cityLayer.style.setProperty("--city-font", `${fontSize}px`);
+
+          cities.forEach((city, index) => {
+            const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            const placeLeft = city.x > centerX;
+            const verticalOffset = ((index % 3) - 1) * fontSize * .42;
+
+            group.classList.add("chinaCityPoint");
+            point.setAttribute("cx", city.x);
+            point.setAttribute("cy", city.y);
+            point.setAttribute("r", Math.max(.16, pointRadius));
+            label.setAttribute("x", city.x + (placeLeft ? -labelGap : labelGap));
+            label.setAttribute("y", city.y + verticalOffset);
+            label.setAttribute("text-anchor", placeLeft ? "end" : "start");
+            label.setAttribute("dominant-baseline", "middle");
+            label.textContent = shortCityName(city.name);
+            group.append(point, label);
+            cityLayer.append(group);
+          });
+
+          return cities.length;
+        };
 
         const activatePreview = (path) => {
           if (path !== activeProvince) return;
@@ -195,10 +240,16 @@
           chinaMapMount.classList.add("isPreviewing");
 
           const bounds = path.getBBox();
-          const padding = Math.max(18, Math.max(bounds.width, bounds.height) * .34);
-          const width = Math.max(42, bounds.width + padding * 2);
-          const height = Math.max(42, bounds.height + padding * 2);
+          const padding = Math.max(4, Math.max(bounds.width, bounds.height) * .1);
+          const width = Math.max(26, bounds.width + padding * 2);
+          const height = Math.max(26, bounds.height + padding * 2);
           const side = Math.max(width, height);
+          const cityCount = renderCities(path, side);
+          if (chinaMapLabel) {
+            chinaMapLabel.textContent = cityCount > 1
+              ? `${path.dataset.name} · ${cityCount} 城市`
+              : path.dataset.name || "选择省份";
+          }
           animateViewBox(zoomSvg, [
             bounds.x + bounds.width / 2 - side / 2,
             bounds.y + bounds.height / 2 - side / 2,
@@ -234,6 +285,7 @@
             if (activeProvince) return;
             zoomSvg.classList.remove("isZoomed");
             zoomPaths.forEach((candidate) => candidate.classList.remove("isActive"));
+            cityLayer.replaceChildren();
             zoomSvg.setAttribute("viewBox", defaultViewBox.join(" "));
           }, reducedMotion ? 0 : 340);
         };
