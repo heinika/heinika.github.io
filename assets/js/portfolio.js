@@ -394,12 +394,12 @@
                 + Math.abs(grayscale[index + width] - grayscale[index - width]);
               const ink = Math.min(1, edge / 38);
               const shade = (255 - grayscale[index]) / 255;
-              const paperRed = 238 - shade * 35;
-              const paperGreen = 247 - shade * 28;
-              const paperBlue = 248 - shade * 20;
-              pixels.data[offset] = paperRed * (1 - ink) + 18 * ink;
-              pixels.data[offset + 1] = paperGreen * (1 - ink) + 112 * ink;
-              pixels.data[offset + 2] = paperBlue * (1 - ink) + 137 * ink;
+              const paperRed = 242 - shade * 42;
+              const paperGreen = 226 - shade * 38;
+              const paperBlue = 187 - shade * 31;
+              pixels.data[offset] = paperRed * (1 - ink) + 59 * ink;
+              pixels.data[offset + 1] = paperGreen * (1 - ink) + 42 * ink;
+              pixels.data[offset + 2] = paperBlue * (1 - ink) + 27 * ink;
               pixels.data[offset + 3] = 255;
             }
           }
