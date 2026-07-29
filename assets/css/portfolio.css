@@ -762,10 +762,44 @@ h1 {
 }
 
 .featured .projectVisual { grid-area: map; border-bottom: 0; border-left: 1px solid var(--line); }
-.featured .projectBody { grid-area: copy; }
+.featured .projectBody {
+  position: relative;
+  grid-area: copy;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--cyan) 4%, transparent) 1px, transparent 1px) 0 0 / 68px 100%,
+    radial-gradient(circle at 33% 35%, color-mix(in srgb, var(--cyan) 6%, transparent), transparent 30%);
+}
 .projectBody { display: flex; flex-direction: column; padding: 34px 38px 38px; transform: translateZ(18px); }
 .projectMeta { display: flex; justify-content: space-between; gap: 20px; color: var(--cyan); font-family: var(--mono); font-size: 8px; letter-spacing: .12em; }
 .projectMeta span:first-child { color: var(--acid); }
+.projectAtlasSignal {
+  display: grid;
+  grid-template-columns: auto minmax(36px, 1fr) auto;
+  align-items: end;
+  gap: clamp(16px, 2.2vw, 34px);
+  margin: clamp(54px, 7vw, 92px) 0 36px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.projectAtlasSignal strong {
+  color: color-mix(in srgb, var(--cyan) 66%, var(--text));
+  font-family: var(--sans);
+  font-size: clamp(78px, 8vw, 132px);
+  font-weight: 200;
+  line-height: .68;
+  letter-spacing: -.095em;
+}
+.projectAtlasSignal i {
+  height: 1px;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--cyan) 65%, transparent), var(--line));
+}
+.projectAtlasSignal span {
+  font-size: 7px;
+  line-height: 1.9;
+  letter-spacing: .12em;
+  text-align: right;
+}
 .projectBody h3 { margin: auto 0 15px; font-size: clamp(28px, 3vw, 48px); font-weight: 500; line-height: 1.12; letter-spacing: -.045em; }
 .projectBody p { max-width: 590px; margin: 0; color: var(--muted); font-size: 13px; font-weight: 300; line-height: 1.9; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 24px 0 0; padding: 0; list-style: none; }
@@ -811,7 +845,7 @@ h1 {
 .chinaMapMount {
   position: relative;
   z-index: 2;
-  height: min(76%, 480px);
+  height: min(92%, 520px);
   aspect-ratio: 1;
   filter: drop-shadow(0 18px 35px rgba(0,0,0,.28));
   isolation: isolate;
