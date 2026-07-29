@@ -43,7 +43,11 @@ export default {
       } catch {
         return new Response("Invalid image URL", { status: 400 });
       }
-      if (imageUrl.protocol !== "https:" || imageUrl.hostname !== "upload.wikimedia.org") {
+      const allowedImageHost = imageUrl.hostname === "upload.wikimedia.org"
+        || imageUrl.hostname.endsWith(".qunarzz.com")
+        || imageUrl.hostname.endsWith(".qunar.com")
+        || imageUrl.hostname.endsWith(".c-ctrip.com");
+      if (imageUrl.protocol !== "https:" || !allowedImageHost) {
         return new Response("Image host is not allowed", { status: 403 });
       }
       const upstream = await fetch(imageUrl, {

@@ -312,7 +312,7 @@
         attractionStatus.setAttribute("aria-live", "polite");
         attractionList.className = "cityAttractionList";
         attractionSource.className = "cityAttractionSource";
-        attractionSource.textContent = "实时资料与图像 · 中文维基百科 / Wikimedia";
+        attractionSource.textContent = "本地景点资料 · China City Attraction Details / Qunar";
         attractionHeading.append(attractionKicker, attractionTitle);
         attractionHeader.append(attractionHeading, attractionClose);
         attractionPanel.append(attractionHeader, attractionStatus, attractionList, attractionSource);
@@ -327,6 +327,7 @@
         let cityBaseRadius = 1;
         let attractionRequest = 0;
         const attractionCache = new Map();
+        let localAttractionDataPromise = null;
 
         const zoomPathFor = (path) => zoomPaths.find(
           (candidate) => candidate.dataset.code === path.dataset.code
@@ -407,8 +408,77 @@
           canvas.classList.add("isReady");
         };
 
+        const drawGuideSketch = (canvas, title) => {
+          const width = 360;
+          const height = 220;
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext("2d");
+          if (!context) return;
+          let seed = Array.from(title).reduce(
+            (value, character) => Math.imul(value ^ character.charCodeAt(0), 16777619),
+            2166136261
+          ) >>> 0;
+          const random = () => {
+            seed = Math.imul(seed ^ (seed >>> 15), seed | 1) >>> 0;
+            return seed / 4294967296;
+          };
+          const background = context.createLinearGradient(0, 0, width, height);
+          background.addColorStop(0, "#f3e5c1");
+          background.addColorStop(1, "#d9bd88");
+          context.fillStyle = background;
+          context.fillRect(0, 0, width, height);
+          context.strokeStyle = "rgba(77,52,30,.16)";
+          context.lineWidth = 1;
+          for (let y = 16; y < height; y += 13) {
+            context.beginPath();
+            context.moveTo(0, y + random() * 3);
+            context.bezierCurveTo(
+              width * .3, y - 5 + random() * 10,
+              width * .7, y - 5 + random() * 10,
+              width, y + random() * 3
+            );
+            context.stroke();
+          }
+          context.strokeStyle = "#5a3e28";
+          context.lineWidth = 2;
+          context.beginPath();
+          context.moveTo(20, height * .68);
+          for (let x = 20; x <= width - 20; x += 18) {
+            context.lineTo(x, height * (.68 - random() * .28));
+          }
+          context.stroke();
+          context.textAlign = "center";
+          context.fillStyle = "#6e2f25";
+          context.font = '600 24px "Noto Sans SC", "Microsoft YaHei", sans-serif';
+          context.fillText(title.slice(0, 12), width / 2, 58);
+          context.fillStyle = "#725b3d";
+          context.font = '11px ui-monospace, "SFMono-Regular", Consolas, monospace';
+          context.fillText("LOCAL CITY FIELD NOTES", width / 2, 82);
+          canvas.classList.add("isReady");
+        };
+
+        const loadLocalAttractions = () => {
+          if (!localAttractionDataPromise) {
+            localAttractionDataPromise = fetch(chinaMapMount.dataset.attractionsSrc)
+              .then((response) => {
+                if (!response.ok) throw new Error(`Local attraction data failed: ${response.status}`);
+                return response.json();
+              });
+          }
+          return localAttractionDataPromise;
+        };
+
         const fetchAttractions = async (city) => {
           if (attractionCache.has(city.name)) return attractionCache.get(city.name);
+          try {
+            const localData = await loadLocalAttractions();
+            const localPlaces = localData.cities?.[city.name];
+            if (localPlaces?.length) {
+              attractionCache.set(city.name, localPlaces);
+              return localPlaces;
+            }
+          } catch {}
           const coordinates = cityCoordinates(city);
           const cityName = shortCityName(city.name);
           const parameters = new URLSearchParams({
@@ -492,22 +562,29 @@
             card.target = "_blank";
             card.rel = "noopener";
             media.className = "cityAttractionMedia";
-            image.crossOrigin = "anonymous";
-            image.loading = "lazy";
-            image.alt = `${place.title}景点图`;
-            const originalImage = place.thumbnail.source;
-            const proxyImage = `/api/attraction-image?src=${encodeURIComponent(originalImage)}`;
-            image.src = proxyImage;
-            image.addEventListener("error", () => {
-              if (image.src === originalImage) return;
-              image.src = originalImage;
-            }, { once: true });
             sketch.setAttribute("aria-hidden", "true");
-            image.addEventListener("load", () => sketchImage(image, sketch), { once: true });
             number.textContent = String(index + 1).padStart(2, "0");
             title.textContent = place.title;
             description.textContent = (place.extract || "打开条目查看景点资料。").replace(/\s+/g, " ").slice(0, 72);
-            media.append(image, sketch, number);
+
+            const originalImage = place.thumbnail?.source;
+            if (originalImage) {
+              image.crossOrigin = "anonymous";
+              image.loading = "lazy";
+              image.alt = `${place.title}景点图`;
+              const proxyImage = `/api/attraction-image?src=${encodeURIComponent(originalImage)}`;
+              image.src = proxyImage;
+              image.addEventListener("error", () => {
+                if (image.src === originalImage) return;
+                image.src = originalImage;
+              }, { once: true });
+              image.addEventListener("load", () => sketchImage(image, sketch), { once: true });
+              media.append(image, sketch, number);
+            } else {
+              drawGuideSketch(sketch, place.title);
+              media.append(sketch, number);
+            }
+
             card.append(media, title, description);
             attractionList.append(card);
           });
@@ -520,7 +597,7 @@
           );
           group.classList.add("isActive");
           attractionTitle.textContent = `${city.name} · 景点`;
-          attractionStatus.textContent = "正在检索附近景点与图像…";
+          attractionStatus.textContent = "正在载入本地景点资料…";
           attractionList.replaceChildren();
           attractionPanel.classList.add("isVisible");
           attractionPanel.setAttribute("aria-hidden", "false");
@@ -530,8 +607,8 @@
             const places = await fetchAttractions(city);
             if (request !== attractionRequest) return;
             attractionStatus.textContent = places.length
-              ? `找到 ${places.length} 处带图景点 · 点击卡片查看资料`
-              : "附近暂时没有可用的带图条目";
+              ? `已载入 ${places.length} 条本地景点资料 · 点击卡片查看详情`
+              : "本地景点资料暂时不可用";
             renderAttractions(city, places);
           } catch {
             if (request !== attractionRequest) return;

@@ -1,0 +1,8 @@
+Dataset: China City Attraction Details
+Author: Audrey Hengrui Zhang
+Source: https://www.kaggle.com/datasets/audreyhengruizhang/china-city-attraction-details
+License: Apache 2.0
+
+The dataset documentation states that the attraction metadata was collected
+from https://travel.qunar.com/. This project stores a reduced local index and
+loads referenced images on demand rather than redistributing the image files.
