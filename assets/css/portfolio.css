@@ -1105,9 +1105,15 @@ h1 {
 .mapCard:hover { z-index: 3; border-color: var(--line-strong); box-shadow: 0 24px 55px rgba(0,0,0,.35); transform: translateY(-8px) rotateX(2deg); }
 .mapCard[hidden] { display: none; }
 .mapFrame { position: relative; display: block; aspect-ratio: 3 / 3.55; overflow: hidden; }
-.mapFrame::after { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(3,5,9,.42)); content: ""; pointer-events: none; }
-.mapFrame img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.78) contrast(1.04); transition: filter .45s ease, transform .55s cubic-bezier(.2,.75,.25,1); }
-.mapCard:hover img { filter: saturate(1) contrast(1.02); transform: scale(1.035); }
+.mapFrame::after { position: absolute; z-index: 2; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(3,5,9,.42)); content: ""; pointer-events: none; }
+.mapFrame img,
+.provinceCanvas { display: block; width: 100%; height: 100%; object-fit: cover; transition: filter .45s ease, opacity .35s ease, transform .55s cubic-bezier(.2,.75,.25,1); }
+.mapFrame img { filter: saturate(.78) contrast(1.04); }
+.provinceCanvas { position: absolute; z-index: 1; inset: 0; background: #030713; opacity: 0; pointer-events: none; }
+.mapFrame.hasGenerated .provinceCanvas { opacity: 1; }
+.mapFrame.hasGenerated img { opacity: 0; }
+.mapCard:hover img,
+.mapCard:hover .provinceCanvas { filter: saturate(1.08) contrast(1.03); transform: scale(1.035); }
 .mapCaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; border-top: 1px solid var(--line); }
 .mapCaption strong { min-width: 0; overflow: hidden; font-size: 12px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .mapCaption em { flex: none; color: var(--muted); font-family: var(--mono); font-size: 7px; font-style: normal; letter-spacing: .08em; }
@@ -1116,7 +1122,10 @@ h1 {
 .mapDialog::backdrop { background: rgba(2,4,8,.76); backdrop-filter: blur(8px); }
 .dialogClose { position: absolute; z-index: 3; top: 26px; right: 26px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(5,8,16,.65); color: #fff; font-family: var(--mono); font-size: 8px; cursor: pointer; backdrop-filter: blur(10px); }
 .dialogInner { position: relative; max-height: calc(94vh - 28px); border-radius: 14px; overflow: auto; }
-.dialogImage { display: block; width: 100%; height: auto; border-radius: 14px; }
+.dialogImage,
+.dialogCanvas { display: block; width: 100%; height: auto; border-radius: 14px; background: #030713; }
+.dialogImage[hidden],
+.dialogCanvas[hidden] { display: none; }
 .dialogCaption { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: rgba(5,8,16,.82); backdrop-filter: blur(16px); }
 .dialogCaption span { color: var(--cyan); font-family: var(--mono); font-size: 8px; letter-spacing: .12em; }.dialogCaption strong { font-size: 13px; font-weight: 500; }
 

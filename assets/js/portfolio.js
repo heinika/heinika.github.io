@@ -79,6 +79,7 @@
   const mapCards = document.querySelectorAll(".mapCard");
   const dialog = document.querySelector("#map-dialog");
   const dialogImage = dialog?.querySelector(".dialogImage");
+  const dialogCanvas = dialog?.querySelector(".dialogCanvas");
   const dialogTitle = dialog?.querySelector("#map-dialog-title");
 
   filterButtons.forEach((button) => {
@@ -110,8 +111,17 @@
   mapCards.forEach((card) => {
     card.addEventListener("click", () => {
       if (!dialog || !dialogImage || !dialogTitle) return;
-      dialogImage.src = card.dataset.src || "";
-      dialogImage.alt = `${card.dataset.title || ""}复古立体手绘地理图`;
+      const artwork = card.provinceArtwork;
+      const generated = artwork && dialogCanvas && window.ProvinceArtwork?.render(
+        dialogCanvas,
+        { ...artwork, detailed: true }
+      );
+      if (dialogCanvas) dialogCanvas.hidden = !generated;
+      dialogImage.hidden = Boolean(generated);
+      if (!generated) {
+        dialogImage.src = card.dataset.src || "";
+        dialogImage.alt = `${card.dataset.title || ""}复古立体手绘地理图`;
+      }
       dialogTitle.textContent = card.dataset.title || "";
       dialog.showModal();
     });
@@ -170,6 +180,61 @@
 
         const defaultViewBox = parseViewBox(svg.dataset.defaultViewbox || svg.getAttribute("viewBox"));
         const provincePaths = Array.from(svg.querySelectorAll(".chinaProvince"));
+        const provinceByName = new Map(provincePaths.map((path) => [path.dataset.name, path]));
+
+        const prepareCardArtwork = (card) => {
+          if (card.provinceArtwork) return card.provinceArtwork;
+          const path = provinceByName.get(card.dataset.title);
+          if (!path) return null;
+          const artwork = {
+            name: path.dataset.name || "",
+            code: path.dataset.code || "",
+            pathData: path.getAttribute("d") || "",
+            bounds: path.getBBox(),
+            cities: cityData.provinces?.[path.dataset.code] || []
+          };
+          card.provinceArtwork = artwork;
+          card.dataset.code = artwork.code;
+          return artwork;
+        };
+
+        const renderCardArtwork = (card) => {
+          if (card.dataset.artworkReady === "true") return;
+          const frame = card.querySelector(".mapFrame");
+          const artwork = prepareCardArtwork(card);
+          if (!artwork || !frame || !window.ProvinceArtwork) return;
+          let canvas = frame.querySelector(".provinceCanvas");
+          if (!canvas) {
+            canvas = document.createElement("canvas");
+            canvas.className = "provinceCanvas";
+            canvas.setAttribute("aria-hidden", "true");
+            frame.prepend(canvas);
+          }
+          try {
+            if (!window.ProvinceArtwork.render(canvas, artwork)) return;
+            card.provinceArtwork = artwork;
+            card.dataset.code = artwork.code;
+            card.dataset.artworkReady = "true";
+            frame.classList.add("hasGenerated");
+          } catch (error) {
+            console.warn(`Artwork fallback used for ${artwork.name}`, error);
+          }
+        };
+
+        mapCards.forEach(prepareCardArtwork);
+        if ("IntersectionObserver" in window) {
+          const artworkObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              renderCardArtwork(entry.target);
+              artworkObserver.unobserve(entry.target);
+            });
+          }, { rootMargin: "420px 0px" });
+          mapCards.forEach((card) => artworkObserver.observe(card));
+        } else {
+          mapCards.forEach(renderCardArtwork);
+        }
+
         const zoomSvg = svg.cloneNode(true);
         const zoomPaths = Array.from(zoomSvg.querySelectorAll(".chinaProvince"));
         zoomSvg.classList.add("chinaMapZoomLayer");
