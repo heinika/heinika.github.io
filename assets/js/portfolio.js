@@ -127,8 +127,8 @@
 
   if (chinaMapMount) {
     let mapViewFrame = 0;
-    let previewTimer = 0;
     let resetTimer = 0;
+    let previewOpen = false;
 
     const parseViewBox = (value) => value.trim().split(/\s+/).map(Number);
 
@@ -184,9 +184,56 @@
         const cityLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
         cityLayer.classList.add("chinaCityLayer");
         zoomSvg.append(cityLayer);
-        chinaMapMount.append(zoomSvg);
+        const zoomViewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        zoomViewport.classList.add("chinaMapZoomViewport");
+        Array.from(zoomSvg.children).forEach((child) => zoomViewport.append(child));
+        zoomSvg.append(zoomViewport);
+
+        const previewPanel = document.createElement("dialog");
+        const previewHeader = document.createElement("div");
+        const previewMeta = document.createElement("div");
+        const previewKicker = document.createElement("span");
+        const previewTitle = document.createElement("strong");
+        const previewControls = document.createElement("div");
+        const zoomOutButton = document.createElement("button");
+        const zoomResetButton = document.createElement("button");
+        const zoomInButton = document.createElement("button");
+        const atlasButton = document.createElement("button");
+        const closeButton = document.createElement("button");
+        const previewHelp = document.createElement("p");
+        previewPanel.className = "chinaMapPreview";
+        previewPanel.setAttribute("aria-labelledby", "city-map-title");
+        previewHeader.className = "chinaMapPreviewHeader";
+        previewMeta.className = "chinaMapPreviewMeta";
+        previewControls.className = "chinaMapPreviewControls";
+        previewTitle.id = "city-map-title";
+        previewKicker.textContent = "CITY ATLAS / PROVINCE DETAIL";
+        previewHelp.className = "chinaMapPreviewHelp";
+        previewHelp.textContent = "滚轮 / 双指缩放 · 拖动查看 · 双击继续放大";
+        zoomOutButton.type = "button";
+        zoomOutButton.textContent = "−";
+        zoomOutButton.setAttribute("aria-label", "缩小地图");
+        zoomResetButton.type = "button";
+        zoomResetButton.textContent = "1:1";
+        zoomResetButton.setAttribute("aria-label", "恢复初始比例");
+        zoomInButton.type = "button";
+        zoomInButton.textContent = "+";
+        zoomInButton.setAttribute("aria-label", "放大地图");
+        atlasButton.type = "button";
+        atlasButton.className = "cityAtlasAction";
+        atlasButton.textContent = "查看手绘图鉴 ↗";
+        closeButton.type = "button";
+        closeButton.textContent = "×";
+        closeButton.setAttribute("aria-label", "关闭城市地图");
+        previewMeta.append(previewKicker, previewTitle);
+        previewControls.append(zoomOutButton, zoomResetButton, zoomInButton, atlasButton, closeButton);
+        previewHeader.append(previewMeta, previewControls);
+        previewPanel.append(previewHeader, zoomSvg, previewHelp);
+        document.body.append(previewPanel);
 
         let activeProvince = null;
+        let cityBaseFont = 1;
+        let cityBaseRadius = 1;
 
         const zoomPathFor = (path) => zoomPaths.find(
           (candidate) => candidate.dataset.code === path.dataset.code
@@ -205,7 +252,9 @@
           const fontSize = side / 48;
           const labelGap = side / 90;
           const pointRadius = side / 190;
-          cityLayer.style.setProperty("--city-font", `${fontSize}px`);
+          cityBaseFont = fontSize;
+          cityBaseRadius = Math.max(.16, pointRadius);
+          cityLayer.style.setProperty("--city-font", `${cityBaseFont}px`);
 
           cities.forEach((city, index) => {
             const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -213,21 +262,57 @@
             const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             const placeLeft = city.x > centerX;
             const verticalOffset = ((index % 3) - 1) * fontSize * .42;
+            const horizontalOffset = placeLeft ? -labelGap : labelGap;
 
             group.classList.add("chinaCityPoint");
             point.setAttribute("cx", city.x);
             point.setAttribute("cy", city.y);
-            point.setAttribute("r", Math.max(.16, pointRadius));
-            label.setAttribute("x", city.x + (placeLeft ? -labelGap : labelGap));
+            point.setAttribute("r", cityBaseRadius);
+            label.setAttribute("x", city.x + horizontalOffset);
             label.setAttribute("y", city.y + verticalOffset);
             label.setAttribute("text-anchor", placeLeft ? "end" : "start");
             label.setAttribute("dominant-baseline", "middle");
+            label.dataset.cityX = city.x;
+            label.dataset.cityY = city.y;
+            label.dataset.offsetX = horizontalOffset;
+            label.dataset.offsetY = verticalOffset;
             label.textContent = shortCityName(city.name);
             group.append(point, label);
             cityLayer.append(group);
           });
 
           return cities.length;
+        };
+
+        const d3 = window.d3;
+        const zoomSelection = d3?.select(zoomSvg);
+        const updateSemanticScale = (scale = 1) => {
+          cityLayer.style.setProperty("--city-font", `${cityBaseFont / scale}px`);
+          cityLayer.querySelectorAll("circle").forEach((point) => {
+            point.setAttribute("r", cityBaseRadius / scale);
+          });
+          cityLayer.querySelectorAll("text").forEach((label) => {
+            label.setAttribute("x", Number(label.dataset.cityX) + Number(label.dataset.offsetX) / scale);
+            label.setAttribute("y", Number(label.dataset.cityY) + Number(label.dataset.offsetY) / scale);
+          });
+        };
+        const zoomBehavior = d3?.zoom()
+          .scaleExtent([1, 8])
+          .on("zoom", (event) => {
+            zoomViewport.setAttribute("transform", event.transform);
+            updateSemanticScale(event.transform.k);
+          });
+        if (zoomSelection && zoomBehavior) zoomSelection.call(zoomBehavior);
+
+        const changeZoom = (factor) => {
+          if (!zoomSelection || !zoomBehavior) return;
+          const selection = reducedMotion ? zoomSelection : zoomSelection.transition().duration(240);
+          selection.call(zoomBehavior.scaleBy, factor);
+        };
+        const resetZoom = () => {
+          if (!zoomSelection || !zoomBehavior) return;
+          const selection = reducedMotion ? zoomSelection : zoomSelection.transition().duration(280);
+          selection.call(zoomBehavior.transform, d3.zoomIdentity);
         };
 
         const activatePreview = (path) => {
@@ -245,11 +330,21 @@
           const height = Math.max(26, bounds.height + padding * 2);
           const side = Math.max(width, height);
           const cityCount = renderCities(path, side);
+          previewTitle.textContent = cityCount > 1
+            ? `${path.dataset.name} · ${cityCount} 城市`
+            : path.dataset.name || "";
           if (chinaMapLabel) {
             chinaMapLabel.textContent = cityCount > 1
               ? `${path.dataset.name} · ${cityCount} 城市`
               : path.dataset.name || "选择省份";
           }
+          if (!previewPanel.open) previewPanel.showModal();
+          previewOpen = true;
+          zoomSelection?.call(zoomBehavior.transform, d3.zoomIdentity);
+          requestAnimationFrame(() => {
+            previewPanel.classList.add("isVisible");
+            closeButton.focus({ preventScroll: true });
+          });
           animateViewBox(zoomSvg, [
             bounds.x + bounds.width / 2 - side / 2,
             bounds.y + bounds.height / 2 - side / 2,
@@ -258,26 +353,22 @@
           ]);
         };
 
-        const showProvince = (path, immediate = false) => {
+        const showProvince = (path) => {
           if (!path || path === activeProvince) return;
-          clearTimeout(previewTimer);
           clearTimeout(resetTimer);
           activeProvince?.classList.remove("isActive");
           activeProvince = path;
           path.classList.add("isActive");
           if (chinaMapLabel) chinaMapLabel.textContent = path.dataset.name || "选择省份";
-          previewTimer = window.setTimeout(
-            () => activatePreview(path),
-            immediate || reducedMotion ? 0 : 110
-          );
         };
 
-        const resetProvince = () => {
-          clearTimeout(previewTimer);
+        const resetProvince = (force = false) => {
+          if (previewOpen && !force) return;
           activeProvince?.classList.remove("isActive");
           activeProvince = null;
           if (chinaMapLabel) chinaMapLabel.textContent = "选择省份";
           chinaMapMount.classList.remove("isPreviewing");
+          previewPanel.classList.remove("isVisible");
           zoomSvg.classList.remove("isVisible");
           animateViewBox(zoomSvg, defaultViewBox, 320);
           clearTimeout(resetTimer);
@@ -297,10 +388,10 @@
           if (province) showProvince(province);
           else if (event.target === svg) resetProvince();
         });
-        svg.addEventListener("pointerleave", resetProvince);
+        svg.addEventListener("pointerleave", () => resetProvince());
         svg.addEventListener("focusin", (event) => {
           const province = provinceFromEvent(event);
-          if (province) showProvince(province, true);
+          if (province) showProvince(province);
         });
         svg.addEventListener("focusout", () => {
           requestAnimationFrame(() => {
@@ -310,14 +401,34 @@
         svg.addEventListener("click", (event) => {
           const province = provinceFromEvent(event);
           if (!province) return;
-          const targetCard = Array.from(mapCards).find((card) => card.dataset.title === province.dataset.name);
-          targetCard?.click();
+          event.preventDefault();
+          showProvince(province);
+          activatePreview(province);
         });
         svg.addEventListener("keydown", (event) => {
           const province = provinceFromEvent(event);
           if (!province || (event.key !== "Enter" && event.key !== " ")) return;
           event.preventDefault();
           province.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        zoomOutButton.addEventListener("click", () => changeZoom(1 / 1.5));
+        zoomResetButton.addEventListener("click", resetZoom);
+        zoomInButton.addEventListener("click", () => changeZoom(1.5));
+        closeButton.addEventListener("click", () => previewPanel.close());
+        atlasButton.addEventListener("click", () => {
+          const provinceName = activeProvince?.dataset.name;
+          const targetCard = Array.from(mapCards).find((card) => card.dataset.title === provinceName);
+          previewPanel.close();
+          targetCard?.click();
+        });
+        previewPanel.addEventListener("click", (event) => {
+          if (event.target === previewPanel) previewPanel.close();
+        });
+        previewPanel.addEventListener("close", () => {
+          previewOpen = false;
+          resetProvince(true);
+          resetZoom();
         });
 
         if (provincePaths.length !== mapCards.length) {

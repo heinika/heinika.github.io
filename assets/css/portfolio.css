@@ -854,6 +854,146 @@ h1 {
   opacity: 1;
 }
 
+.chinaMapPreview {
+  position: fixed;
+  z-index: 80;
+  top: 50%;
+  left: 50%;
+  width: min(90vw, 84vh, 940px);
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  aspect-ratio: 1;
+  border: 1px solid var(--line-strong);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 54% 44%, color-mix(in srgb, var(--violet) 15%, transparent), transparent 48%),
+    color-mix(in srgb, var(--panel-solid) 94%, transparent);
+  box-shadow: 0 46px 130px rgba(0,0,0,.64), inset 0 0 0 1px color-mix(in srgb, var(--cyan) 7%, transparent);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translate(-50%,-47%) scale(.975);
+  transition: opacity .2s ease, transform .32s cubic-bezier(.2,.75,.25,1);
+}
+
+.chinaMapPreview[open].isVisible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.chinaMapPreview::backdrop {
+  background: rgba(2,4,8,.72);
+  backdrop-filter: blur(9px);
+}
+
+.chinaMapPreview::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 5%, transparent), transparent 38%);
+  content: "";
+  pointer-events: none;
+}
+
+.chinaMapPreviewHeader {
+  position: absolute;
+  z-index: 4;
+  top: 24px;
+  right: 28px;
+  left: 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.chinaMapPreviewMeta {
+  display: grid;
+  gap: 6px;
+}
+
+.chinaMapPreviewMeta strong {
+  color: var(--cyan);
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.chinaMapPreviewControls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: auto;
+}
+
+.chinaMapPreviewControls button {
+  display: grid;
+  min-width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-solid) 88%, transparent);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+
+.chinaMapPreviewControls button:hover {
+  border-color: var(--cyan);
+  background: var(--panel-hover);
+  color: var(--cyan);
+}
+
+.chinaMapPreviewControls .cityAtlasAction {
+  padding-inline: 14px;
+  color: var(--acid);
+  font-size: 9px;
+}
+
+.chinaMapPreview .chinaMapZoomLayer {
+  position: absolute;
+  z-index: 2;
+  inset: 58px 24px 22px;
+  width: calc(100% - 48px);
+  height: calc(100% - 80px);
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.chinaMapPreview .chinaMapZoomLayer:active {
+  cursor: grabbing;
+}
+
+.chinaMapPreviewHelp {
+  position: absolute;
+  z-index: 4;
+  right: 28px;
+  bottom: 16px;
+  left: 28px;
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .1em;
+  text-align: center;
+  pointer-events: none;
+}
+
 .chinaMapMount.isPreviewing > .chinaMapSvg:not(.chinaMapZoomLayer) {
   opacity: .16;
 }
@@ -898,7 +1038,7 @@ h1 {
 .chinaCityPoint text {
   fill: var(--text);
   stroke: color-mix(in srgb, var(--bg-deep) 92%, transparent);
-  stroke-width: 2.5px;
+  stroke-width: 3px;
   paint-order: stroke fill;
   stroke-linejoin: round;
   font-family: var(--sans);
@@ -1264,6 +1404,15 @@ footer {
   .projectCard { min-height: 540px; grid-template-rows: 280px 1fr; }
   .projectCard.featured { grid-template-rows: 340px auto; }
   .chinaMapSource { display: none; }
+  .chinaMapPreview { width: min(96vw, 88vh); border-radius: 20px; }
+  .chinaMapPreviewHeader { top: 16px; right: 16px; left: 16px; gap: 12px; }
+  .chinaMapPreviewMeta span { display: none; }
+  .chinaMapPreviewMeta strong { font-size: 14px; }
+  .chinaMapPreviewControls { gap: 4px; }
+  .chinaMapPreviewControls button { min-width: 30px; height: 30px; padding-inline: 8px; }
+  .chinaMapPreviewControls .cityAtlasAction { padding-inline: 8px; font-size: 7px; }
+  .chinaMapPreview .chinaMapZoomLayer { inset: 48px 12px 18px; width: calc(100% - 24px); height: calc(100% - 66px); }
+  .chinaMapPreviewHelp { right: 16px; bottom: 9px; left: 16px; font-size: 7px; }
   .projectBody { padding: 28px 24px; }
   .atlasShowcase { padding: 76px 20px 50px; }
   .mapGallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
